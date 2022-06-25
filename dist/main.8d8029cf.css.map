@@ -1,1 +1,0 @@
-{"mappings":"AAAA;;;;AAGA;;;;AAMA","sources":["sass/main.scss"],"sourcesContent":["html {\n  box-sizing: border-box;\n}\n*,\n*:before,\n*:after {\n  box-sizing: inherit;\n}\n\nbody {\n  margin: 0;\n  padding: 0;\n}\n"],"names":[],"version":3,"file":"main.8d8029cf.css.map","sourceRoot":"/__parcel_source_root/"}

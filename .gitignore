@@ -8,3 +8,4 @@ dist/GoogleMapsPointCluster2022.*.js.map
 # Folders
 .parcel-cache/
 node_modules/
+dist/
