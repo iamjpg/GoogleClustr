@@ -27,4 +27,5 @@ import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
   });
 
   gc.setCollection(json.data.result_list);
+  gc.print();
 })();
