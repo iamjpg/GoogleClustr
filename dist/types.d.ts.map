@@ -1,1 +1,1 @@
-{"mappings":"AAAA,oBAAoB,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAEvC","sources":["src/src/index.ts","src/index.ts"],"sourcesContent":[null,"export function add(a: number, b: number) {\n  return a + b;\n}\n"],"names":[],"version":3,"file":"types.d.ts.map","sourceRoot":"../"}
+{"mappings":"AAAA,oBAAoB,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAEvC","sources":["src/src/index.ts","src/index.ts"],"sourcesContent":[null,"export function add(a: number, b: number) {\n  return a + b;\n}\n"],"names":[],"version":3,"file":"types.d.ts.map"}
