@@ -1,0 +1,18 @@
+{
+  "name": "googlemapspointcluster2022",
+  "version": "0.0.1",
+  "description": "Google Maps clustering component for dealing with large data sets.",
+  "source": "src/index.js",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build"
+  },
+  "author": "JP Given <jgiven@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.6.2"
+  }
+}
