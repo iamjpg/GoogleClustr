@@ -548,7 +548,7 @@ var _indexJs = require("./dist/module/index.js");
     const loader = new (0, _googleMaps.Loader)((0, _indexJs.GOOGLE_KEY));
     const google = await loader.load();
     const map = new google.maps.Map(document.getElementById("map"), options);
-    const json = await fetch("https://cdn.jsdelivr.net/gh/iamjpg/GoogleMapsPointClusterD3@latest/example.json").then((response)=>response.json()).then((data)=>data);
+    const json = await fetch("https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json").then((response)=>response.json()).then((data)=>data);
     const gc = new (0, _indexJs.GoogleClustr)({
         map,
         mapContainer: "lets do this."

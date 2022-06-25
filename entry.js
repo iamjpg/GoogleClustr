@@ -16,7 +16,7 @@ import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
   const map = new google.maps.Map(document.getElementById('map'), options);
 
   const json = await fetch(
-    'https://cdn.jsdelivr.net/gh/iamjpg/GoogleMapsPointClusterD3@latest/example.json'
+    'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'
   )
     .then((response) => response.json())
     .then((data) => data);
