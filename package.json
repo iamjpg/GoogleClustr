@@ -7,8 +7,8 @@
   "module": "dist/module/index.js",
   "types": "dist/types.d.ts",
   "scripts": {
-    "dev": "run-p watch dev:server",
-    "dev:server": "http-server -p 9876",
+    "dev": "run-p watch parcel",
+    "parcel": "parcel index.html -p 9876",
     "watch": "parcel watch",
     "build": "parcel build"
   },
@@ -22,5 +22,7 @@
     "parcel": "^2.6.2",
     "typescript": ">=3.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "google-maps": "^4.3.3"
+  }
 }

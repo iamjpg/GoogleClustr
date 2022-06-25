@@ -16,21 +16,6 @@
       </section>
     </main>
 
-    <script type="module">
-      import { Loader } from 'https://cdn.pika.dev/google-maps';
-      import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
-
-      const loader = new Loader(GOOGLE_KEY, {});
-
-      const google = await loader.load();
-      const map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-      });
-
-      GoogleClustr({
-        message: 'lets do this.',
-      });
-    </script>
+    <script type="module" src="entry.js"></script>
   </body>
 </html>
