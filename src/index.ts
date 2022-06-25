@@ -1,3 +1,6 @@
-export function add(a: number, b: number) {
-  return a + b;
-}
+import { GOOGLE_KEY as gk } from './google-key';
+export const GOOGLE_KEY = gk;
+
+export const GoogleClustr = (options: object) => {
+  console.log(options);
+};

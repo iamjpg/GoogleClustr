@@ -1,3 +1,8 @@
+# Files
 .DS_store
+.env
+src/google-key.ts
+
+# Folders
 .parcel-cache/
 node_modules/

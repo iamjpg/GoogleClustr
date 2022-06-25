@@ -1,3 +1,4 @@
-export function add(a: number, b: number): number;
+export const GOOGLE_KEY = "3&key=AIzaSyBlBF1pMOPOmycKD-NyTfyyD7Tdo60E6XU";
+export const GoogleClustr: (options: object) => void;
 
 //# sourceMappingURL=types.d.ts.map
