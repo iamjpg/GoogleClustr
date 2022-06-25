@@ -2,11 +2,6 @@
 .DS_store
 .env
 src/google-key.ts
-dist/index.html
-dist/index.js
-dist/index.js.map
-dist/index.*.js
-dist/index.*.js.map
 dist/GoogleMapsPointCluster2022.*.js
 dist/GoogleMapsPointCluster2022.*.js.map
 
