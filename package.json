@@ -24,6 +24,7 @@
     "typescript": ">=3.0.0"
   },
   "dependencies": {
+    "convexhull": "^1.0.7",
     "google-maps": "^4.3.3"
   }
 }

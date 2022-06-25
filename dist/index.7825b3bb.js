@@ -535,16 +535,21 @@ function hmrAcceptRun(bundle, id) {
 var _googleMaps = require("google-maps");
 var _indexJs = require("./dist/module/index.js");
 (async ()=>{
-    const loader = new (0, _googleMaps.Loader)((0, _indexJs.GOOGLE_KEY), {});
-    const google = await loader.load();
-    const map = new google.maps.Map(document.getElementById("map"), {
+    const options = {
         center: {
-            lat: -34.397,
-            lng: 150.644
+            lat: 37.76487,
+            lng: -122.41948
         },
-        zoom: 8
-    });
+        zoom: 6,
+        clickableIcons: false,
+        controlSize: 20,
+        disableDoubleClickZoom: true
+    };
+    const loader = new (0, _googleMaps.Loader)((0, _indexJs.GOOGLE_KEY));
+    const google = await loader.load();
+    const map = new google.maps.Map(document.getElementById("map"), options);
     (0, _indexJs.GoogleClustr)({
+        map,
         message: "lets do this."
     });
 })();

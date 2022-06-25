@@ -1,16 +1,22 @@
-import { Loader } from 'google-maps';
+import { Loader, LoaderOptions } from 'google-maps';
 import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
 
 (async () => {
-  const loader = new Loader(GOOGLE_KEY, {});
+  const options = {
+    center: { lat: 37.76487, lng: -122.41948 },
+    zoom: 6,
+    clickableIcons: false,
+    controlSize: 20,
+    disableDoubleClickZoom: true,
+  };
+
+  const loader = new Loader(GOOGLE_KEY);
 
   const google = await loader.load();
-  const map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
-  });
+  const map = new google.maps.Map(document.getElementById('map'), options);
 
   GoogleClustr({
+    map,
     message: 'lets do this.',
   });
 })();

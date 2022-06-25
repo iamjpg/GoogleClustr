@@ -28,7 +28,7 @@ aside {
 }
 
 div#map-container {
-  background: pink;
+  background: #222;
   position: absolute;
   inset: 58px 0 38px 300px;
 }
