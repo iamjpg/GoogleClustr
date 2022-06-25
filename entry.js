@@ -15,8 +15,16 @@ import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
   const google = await loader.load();
   const map = new google.maps.Map(document.getElementById('map'), options);
 
-  GoogleClustr({
+  const json = await fetch(
+    'https://cdn.jsdelivr.net/gh/iamjpg/GoogleMapsPointClusterD3@latest/example.json'
+  )
+    .then((response) => response.json())
+    .then((data) => data);
+
+  const gc = new GoogleClustr({
     map,
-    message: 'lets do this.',
+    mapContainer: 'lets do this.',
   });
+
+  gc.setCollection(json.data.result_list);
 })();

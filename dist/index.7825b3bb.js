@@ -548,10 +548,12 @@ var _indexJs = require("./dist/module/index.js");
     const loader = new (0, _googleMaps.Loader)((0, _indexJs.GOOGLE_KEY));
     const google = await loader.load();
     const map = new google.maps.Map(document.getElementById("map"), options);
-    (0, _indexJs.GoogleClustr)({
+    const json = await fetch("https://cdn.jsdelivr.net/gh/iamjpg/GoogleMapsPointClusterD3@latest/example.json").then((response)=>response.json()).then((data)=>data);
+    const gc = new (0, _indexJs.GoogleClustr)({
         map,
-        message: "lets do this."
+        mapContainer: "lets do this."
     });
+    gc.setCollection(json.data.result_list);
 })();
 
 },{"google-maps":"38D4Y","./dist/module/index.js":"9CSAF"}],"38D4Y":[function(require,module,exports) {
@@ -645,13 +647,18 @@ exports.export = function(dest, destName, get) {
 },{}],"9CSAF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "GOOGLE_KEY", ()=>$149c1bd638913645$export$570dd3614d0a1b67);
 parcelHelpers.export(exports, "GoogleClustr", ()=>$149c1bd638913645$export$f47163d2c78f638a);
+parcelHelpers.export(exports, "GOOGLE_KEY", ()=>$149c1bd638913645$export$570dd3614d0a1b67);
 const $be173bd1a5733c96$export$570dd3614d0a1b67 = "3&key=AIzaSyBlBF1pMOPOmycKD-NyTfyyD7Tdo60E6XU";
+class $149c1bd638913645$export$f47163d2c78f638a {
+    constructor(options){
+        console.log(options);
+    }
+    setCollection(collection) {
+        this.collection = collection;
+    }
+}
 const $149c1bd638913645$export$570dd3614d0a1b67 = $be173bd1a5733c96$export$570dd3614d0a1b67;
-const $149c1bd638913645$export$f47163d2c78f638a = (options)=>{
-    console.log(options);
-};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["9F41y","iYHaA"], "iYHaA", "parcelRequire9eab")
 

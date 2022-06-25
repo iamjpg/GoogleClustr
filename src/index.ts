@@ -1,20 +1,16 @@
 import { GOOGLE_KEY as gk } from './google-key';
-export const GOOGLE_KEY = gk;
+import { MapOptions } from './interfaces/mapOptions';
 
-interface MapOptions {
-  map: object;
-  mapContainer: HTMLElement;
-  cluserRange: number;
-  threshhold: number;
-  clusterRgba: string;
-  clusterBorder: string;
-  polygonStrokeColor: string;
-  polygonStrokeOpacity: number;
-  polygonStrokeWeight: number;
-  polygonFillColor: string;
-  polygonFillOpacity: number;
+export class GoogleClustr {
+  collection: Array<object>;
+
+  constructor(options: MapOptions) {
+    console.log(options);
+  }
+
+  setCollection(collection: Array<object>) {
+    this.collection = collection;
+  }
 }
 
-export const GoogleClustr = (options: MapOptions) => {
-  console.log(options);
-};
+export const GOOGLE_KEY = gk;
