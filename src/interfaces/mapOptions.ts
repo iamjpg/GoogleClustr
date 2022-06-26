@@ -1,5 +1,6 @@
 export interface MapOptions {
   map: object; // Pass in your map intance.
+  mapContainer: string;
   clusterRange: number; // clusterRange is the pixel grid to cluster. Smaller = more clusters / Larger = less clusters.
   threshold: number; // Threshold is the number of results before showing markers,
   clusterRgba: string; // Change the background of the cluster icon. RGBA only.
@@ -11,4 +12,10 @@ export interface MapOptions {
   polygonFillOpacity: number; // Polygon fill color.
   customPinHoverBehavior: boolean; // If the user of the lib would rather not use popper and opt for their own hover behavior.
   customPinClickBehavior: boolean; // If the user of the lib would rather not use popper and opt for their own click behavior.
+}
+
+export interface CollectionObject {
+  map: any;
+  lat: number;
+  lng: number;
 }
