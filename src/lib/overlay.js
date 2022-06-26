@@ -1,17 +1,17 @@
-class Overlay extends google.maps.OverlayView {
+export class Overlay extends google.maps.OverlayView {
   bounds;
   image;
   div;
-  constructor(bounds, image) {
+  constructor(bounds) {
     super();
     this.bounds = bounds;
-    this.image = image;
   }
   onAdd() {
     this.div = document.createElement('div');
     this.div.style.borderStyle = 'none';
     this.div.style.borderWidth = '0px';
     this.div.style.position = 'absolute';
+    this.div.id = 'GoogleClustrOverlay';
 
     const panes = this.getPanes();
 

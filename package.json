@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "convexhull": "^1.0.7",
+    "d3": "3.5.17",
     "google-maps": "^4.3.3"
   }
 }
