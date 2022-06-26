@@ -1,4 +1,3 @@
-import { Loader } from 'google-maps';
 import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
 
 (async () => {
@@ -10,9 +9,6 @@ import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
     disableDoubleClickZoom: true,
   };
 
-  const loader = new Loader(GOOGLE_KEY);
-
-  const google = await loader.load();
   const map = new google.maps.Map(document.getElementById('map'), options);
 
   const json = await fetch(
