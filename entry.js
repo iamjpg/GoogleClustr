@@ -1,4 +1,4 @@
-import { Loader, LoaderOptions } from 'google-maps';
+import { Loader } from 'google-maps';
 import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
 
 (async () => {
