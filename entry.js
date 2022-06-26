@@ -17,9 +17,7 @@ import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
 
   const json = await fetch(
     'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'
-  )
-    .then((response) => response.json())
-    .then((data) => data);
+  ).then((response) => response.json());
 
   const gc = new GoogleClustr({
     map,
