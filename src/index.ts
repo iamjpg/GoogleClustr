@@ -33,7 +33,7 @@ export class GoogleClustr {
   constructor(options: MapOptions) {
     this.map = options.map;
     this.mapContainer = options.mapContainer || 'map';
-    this.clusterRange = options.clusterRange || 300;
+    this.clusterRange = options.clusterRange || 250;
     this.threshold = options.threshold || 200;
     this.clusterRgba = options.clusterRgba || '51, 102, 153, 0.8';
     this.clusterBorder = options.clusterBorder || '5px solid #ccc';
@@ -61,8 +61,8 @@ export class GoogleClustr {
 
   print() {
     // create quadtree, and get centerpoints.
-    var quadtree = d3.geom.quadtree()(this.returnPointsRaw());
-    var centerPoints = this.getCenterPoints(quadtree);
+    const quadtree = d3.geom.quadtree()(this.returnPointsRaw());
+    const centerPoints = this.getCenterPoints(quadtree);
 
     const overlayInterval = setInterval(() => {
       if (document.querySelector('#GoogleClustrOverlay')) {
@@ -96,22 +96,22 @@ export class GoogleClustr {
   }
 
   paintClustersToCanvas(points) {
-    var self = this;
-    var frag = document.createDocumentFragment();
-    var helpers = new Helpers();
+    const self = this;
+    const frag = document.createDocumentFragment();
+    const helpers = new Helpers();
 
     // Loop over points assessing
-    points.forEach(function (o, i) {
-      var clusterCount = o[2].length;
+    points.forEach(function (o: any[][], i: string) {
+      const clusterCount = o[2].length;
 
-      var div = document.createElement('div');
+      const div = document.createElement('div');
       div.className =
         'point-cluster ' +
         helpers.returnClusterClassObject(clusterCount.toString().length)
           .classSize;
       div.style.backgroundColor = 'rgba(' + self.clusterRgba + ')';
       div.dataset.positionid = i;
-      var latLngPointerArray = [];
+      const latLngPointerArray = [];
 
       o[2].forEach(function (a, b) {
         latLngPointerArray.push(a[2]);
@@ -119,14 +119,14 @@ export class GoogleClustr {
 
       // START - Center cluster icon inside of Polygon.
 
-      var polygonCoords = [];
-      var pi;
-      var mapProjections: MapProjections = helpers.returnMapProjections(
+      const polygonCoords: number[] = [];
+      let pi: number;
+      const mapProjections: MapProjections = helpers.returnMapProjections(
         self.map
       );
 
       latLngPointerArray.forEach(function (o, i) {
-        var pointer = self.collection[parseInt(o)];
+        const pointer = self.collection[parseInt(o)];
         polygonCoords.push(new google.maps.LatLng(pointer.lat, pointer.lng));
       });
 
@@ -134,7 +134,7 @@ export class GoogleClustr {
         mapProjections.bounds.extend(polygonCoords[pi]);
       }
 
-      var point: PointObject = mapProjections.projection.fromLatLngToPoint(
+      const point: PointObject = mapProjections.projection.fromLatLngToPoint(
         new google.maps.LatLng(
           mapProjections.bounds.getCenter().lat(),
           mapProjections.bounds.getCenter().lng()
@@ -159,7 +159,7 @@ export class GoogleClustr {
       // END - Center cluster icon inside of Polygon.
 
       div.dataset.latlngids = latLngPointerArray.join(',');
-      div.innerHTML = clusterCount;
+      div.innerHTML = clusterCount.toString();
       frag.appendChild(div);
       // self.setClusterEvents(div);
     });
@@ -168,10 +168,10 @@ export class GoogleClustr {
   }
 
   checkIfLatLngInBounds() {
-    var helpers = new Helpers();
-    var self = this;
-    var arr = helpers.clone(this.collection);
-    for (var i = 0; i < arr.length; ++i) {
+    const helpers = new Helpers();
+    const self = this;
+    const arr = helpers.clone(this.collection);
+    for (let i = 0; i < arr.length; ++i) {
       let lat = arr[i].lat || arr[i].location.latitude;
       let lng = arr[i].lng || arr[i].location.longitude;
       if (!self.map.getBounds().contains(new google.maps.LatLng(lat, lng))) {
@@ -183,19 +183,19 @@ export class GoogleClustr {
   }
 
   getCenterPoints(quadtree: any) {
-    var clusterPoints = [];
+    const clusterPoints = [];
 
     for (
-      var x = 0;
+      let x = 0;
       x <= document.getElementById(this.mapContainer).offsetWidth;
       x += this.clusterRange
     ) {
       for (
-        var y = 0;
+        let y = 0;
         y <= document.getElementById(this.mapContainer).offsetHeight;
         y += this.clusterRange
       ) {
-        var searched = this.searchQuadTree(
+        const searched = this.searchQuadTree(
           quadtree,
           x,
           y,
@@ -203,7 +203,7 @@ export class GoogleClustr {
           y + this.clusterRange
         );
 
-        var centerPoint = searched.reduce(
+        const centerPoint = searched.reduce(
           function (prev, current) {
             return [prev[0] + current[0], prev[1] + current[1]];
           },
@@ -224,9 +224,9 @@ export class GoogleClustr {
   }
 
   searchQuadTree(quadtree, x0, y0, x3, y3) {
-    var validData = [];
+    const validData = [];
     quadtree.visit(function (node, x1, y1, x2, y2) {
-      var p = node.point;
+      const p = node.point;
       if (p) {
         p.selected = p[0] >= x0 && p[0] < x3 && p[1] >= y0 && p[1] < y3;
         if (p.selected) {
@@ -240,20 +240,20 @@ export class GoogleClustr {
 
   returnPointsRaw() {
     // Projection variables.
-    var helpers = new Helpers();
-    var mapProjections = helpers.returnMapProjections(this.map);
+    const helpers = new Helpers();
+    const mapProjections = helpers.returnMapProjections(this.map);
 
     this.pointsRawLatLng = [];
 
     return this.collection.map(function (o: CollectionObject, i: number) {
       // Create our point.
-      var point = mapProjections.projection.fromLatLngToPoint(
+      const point = mapProjections.projection.fromLatLngToPoint(
         new google.maps.LatLng(o.lat, o.lng)
       );
 
       // Get the x/y based on the scale.
-      var x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
-      var y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
+      const x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
+      const y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
 
       return [x, y, i];
     });
