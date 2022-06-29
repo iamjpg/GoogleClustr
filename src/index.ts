@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import convexhull from 'convexhull';
 import { GOOGLE_KEY as gk } from './google-key';
 import {
   MapOptions,
@@ -29,6 +30,8 @@ export class GoogleClustr {
   customPinClickBehavior: boolean;
   overlay: any;
   mapContainerElem: HTMLElement;
+  points: any;
+  polygon: any;
 
   constructor(options: MapOptions) {
     this.map = options.map;
@@ -44,7 +47,16 @@ export class GoogleClustr {
     this.polygonFillOpacity = options.polygonFillOpacity || '0.2';
     this.customPinHoverBehavior = options.customPinHoverBehavior || false;
     this.customPinClickBehavior = options.customPinClickBehavior || false;
+    this.setMapEvents();
     this.createOverlay();
+  }
+
+  setMapEvents() {
+    google.maps.event.addListener(this.map, 'idle', () => {
+      if (this.collection) {
+        this.print();
+      }
+    });
   }
 
   setCollection(collection: CollectionObject) {
@@ -64,6 +76,10 @@ export class GoogleClustr {
     const quadtree = d3.geom.quadtree()(this.returnPointsRaw());
     const centerPoints = this.getCenterPoints(quadtree);
 
+    if (this.points) {
+      this.points.remove();
+    }
+
     const overlayInterval = setInterval(() => {
       if (document.querySelector('#GoogleClustrOverlay')) {
         clearInterval(overlayInterval);
@@ -75,22 +91,9 @@ export class GoogleClustr {
 
   paint(centerPoints) {
     if (this.checkIfLatLngInBounds().length <= this.threshold) {
-      // this.overlay.setMap(null);
-      // this.points = window.PointClusterPoints = new Point(
-      //   this.map,
-      //   this.checkIfLatLngInBounds(),
-      //   this.customPinClickBehavior,
-      //   this.customPinHoverBehavior
-      // );
-      // this.points.print();
-      // PointPubSub.publish('Point.count', this.points.collection.length);
-      // PointPubSub.publish('Point.show', this.points.collection);
+      // Do some work to get points and then...
       console.log('print points!');
     } else {
-      // PointPubSub.publish(
-      //   'Point.count',
-      //   this.checkIfLatLngInBounds().length
-      // );
       this.paintClustersToCanvas(centerPoints);
     }
   }
@@ -101,7 +104,7 @@ export class GoogleClustr {
     const helpers = new Helpers();
 
     // Loop over points assessing
-    points.forEach(function (o: any[][], i: string) {
+    points.forEach((o: any[][], i: string) => {
       const clusterCount = o[2].length;
 
       const div = document.createElement('div');
@@ -161,10 +164,58 @@ export class GoogleClustr {
       div.dataset.latlngids = latLngPointerArray.join(',');
       div.innerHTML = clusterCount.toString();
       frag.appendChild(div);
-      // self.setClusterEvents(div);
+      this.setClusterEvents(div);
     });
 
     this.mapContainerElem.appendChild(frag);
+  }
+
+  setClusterEvents(el: HTMLElement) {
+    console.log('mouseover set?');
+    // el.onmouseover = () => {
+    //   console.log('is this happening?');
+    //   this.showPolygon(el);
+    // };
+    const self = this;
+    google.maps.event.addDomListener(el, 'mouseover', function () {
+      google.maps.event.trigger(self, 'mouseover');
+    });
+  }
+
+  showPolygon(el: HTMLElement) {
+    var collectionIds = el.dataset.latlngids.split(',');
+
+    // Push the first lat/lng point to the end to close the polygon.
+    collectionIds.push(collectionIds[0]);
+
+    var points = [];
+
+    collectionIds.forEach(function (o, i) {
+      var pointer = this.collection[parseInt(o)];
+      points.push({
+        x: pointer.lat,
+        y: pointer.lng,
+      });
+    });
+
+    var points = convexhull(points);
+    points = points.map(function (item) {
+      return {
+        lat: item.x,
+        lng: item.y,
+      };
+    });
+
+    this.polygon = new google.maps.Polygon({
+      paths: points,
+      strokeColor: this.polygonStrokeColor,
+      strokeOpacity: this.polygonStrokeOpacity,
+      strokeWeight: this.polygonStrokeWeight,
+      fillColor: this.polygonFillColor,
+      fillOpacity: this.polygonFillOpacity,
+    });
+
+    this.polygon.setMap(this.map);
   }
 
   checkIfLatLngInBounds() {
