@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import convexhull from 'convexhull';
 import { GOOGLE_KEY as gk } from './google-key';
 import {
   MapOptions,
@@ -9,6 +8,7 @@ import {
 } from './interfaces/mapOptions';
 import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
+import convexHull from './lib/convexHull';
 
 declare var google: any;
 
@@ -32,6 +32,7 @@ export class GoogleClustr {
   mapContainerElem: HTMLElement;
   points: any;
   polygon: any;
+  helpers: any;
 
   constructor(options: MapOptions) {
     this.map = options.map;
@@ -47,6 +48,7 @@ export class GoogleClustr {
     this.polygonFillOpacity = options.polygonFillOpacity || '0.2';
     this.customPinHoverBehavior = options.customPinHoverBehavior || false;
     this.customPinClickBehavior = options.customPinClickBehavior || false;
+    this.helpers = new Helpers();
     // this.setMapEvents();
     this.createOverlay();
   }
@@ -101,7 +103,6 @@ export class GoogleClustr {
   paintClustersToCanvas(points) {
     const self = this;
     const frag = document.createDocumentFragment();
-    const helpers = new Helpers();
 
     // Loop over points assessing
     points.forEach((o: any[][], i: string) => {
@@ -110,7 +111,7 @@ export class GoogleClustr {
       const div = document.createElement('div');
       div.className =
         'point-cluster ' +
-        helpers.returnClusterClassObject(clusterCount.toString().length)
+        this.helpers.returnClusterClassObject(clusterCount.toString().length)
           .classSize;
       div.style.backgroundColor = 'rgba(' + self.clusterRgba + ')';
       div.dataset.positionid = i;
@@ -124,7 +125,7 @@ export class GoogleClustr {
 
       const polygonCoords: number[] = [];
       let pi: number;
-      const mapProjections: MapProjections = helpers.returnMapProjections(
+      const mapProjections: MapProjections = this.helpers.returnMapProjections(
         self.map
       );
 
@@ -150,12 +151,12 @@ export class GoogleClustr {
 
       div.style.left =
         x -
-        helpers.returnClusterClassObject(clusterCount.toString().length)
+        this.helpers.returnClusterClassObject(clusterCount.toString().length)
           .offSet +
         'px';
       div.style.top =
         y -
-        helpers.returnClusterClassObject(clusterCount.toString().length)
+        this.helpers.returnClusterClassObject(clusterCount.toString().length)
           .offSet +
         'px';
 
@@ -172,8 +173,10 @@ export class GoogleClustr {
 
   setClusterEvents(el: HTMLElement) {
     el.onmouseover = () => {
-      console.log('is this happening?');
       this.showPolygon(el);
+    };
+    el.onmouseout = () => {
+      this.removePolygon(el);
     };
   }
 
@@ -185,7 +188,7 @@ export class GoogleClustr {
 
     var points = [];
 
-    collectionIds.forEach(function (o, i) {
+    collectionIds.forEach((o) => {
       var pointer = this.collection[parseInt(o)];
       points.push({
         x: pointer.lat,
@@ -193,8 +196,9 @@ export class GoogleClustr {
       });
     });
 
-    var points = convexhull(points);
-    points = points.map(function (item) {
+    points = convexHull(points);
+
+    points = points.map((item) => {
       return {
         lat: item.x,
         lng: item.y,
@@ -213,10 +217,13 @@ export class GoogleClustr {
     this.polygon.setMap(this.map);
   }
 
+  removePolygon() {
+    this.polygon.setMap(null);
+  }
+
   checkIfLatLngInBounds() {
-    const helpers = new Helpers();
     const self = this;
-    const arr = helpers.clone(this.collection);
+    const arr = this.helpers.clone(this.collection);
     for (let i = 0; i < arr.length; ++i) {
       let lat = arr[i].lat || arr[i].location.latitude;
       let lng = arr[i].lng || arr[i].location.longitude;
@@ -286,8 +293,7 @@ export class GoogleClustr {
 
   returnPointsRaw() {
     // Projection variables.
-    const helpers = new Helpers();
-    const mapProjections = helpers.returnMapProjections(this.map);
+    const mapProjections = this.helpers.returnMapProjections(this.map);
 
     this.pointsRawLatLng = [];
 
