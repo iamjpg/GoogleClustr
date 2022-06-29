@@ -7,7 +7,7 @@ import {
   MapProjections,
   PointObject,
 } from './interfaces/mapOptions';
-import { Overlay } from './lib/overlay';
+import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 
 declare var google: any;
@@ -47,7 +47,7 @@ export class GoogleClustr {
     this.polygonFillOpacity = options.polygonFillOpacity || '0.2';
     this.customPinHoverBehavior = options.customPinHoverBehavior || false;
     this.customPinClickBehavior = options.customPinClickBehavior || false;
-    this.setMapEvents();
+    // this.setMapEvents();
     this.createOverlay();
   }
 
@@ -67,7 +67,7 @@ export class GoogleClustr {
     if (this.overlay) {
       this.overlay.setMap(null);
     }
-    this.overlay = new Overlay(this.map.getBounds());
+    this.overlay = new Overlay(this.map);
     this.overlay.setMap(this.map);
   }
 
@@ -171,15 +171,10 @@ export class GoogleClustr {
   }
 
   setClusterEvents(el: HTMLElement) {
-    console.log('mouseover set?');
-    // el.onmouseover = () => {
-    //   console.log('is this happening?');
-    //   this.showPolygon(el);
-    // };
-    const self = this;
-    google.maps.event.addDomListener(el, 'mouseover', function () {
-      google.maps.event.trigger(self, 'mouseover');
-    });
+    el.onmouseover = () => {
+      console.log('is this happening?');
+      this.showPolygon(el);
+    };
   }
 
   showPolygon(el: HTMLElement) {

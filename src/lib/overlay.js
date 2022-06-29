@@ -1,42 +1,37 @@
-export class Overlay extends google.maps.OverlayView {
-  bounds;
-  image;
-  div;
-  constructor(bounds) {
-    super();
-    this.bounds = bounds;
-  }
-  onAdd() {
-    this.div = document.createElement('div');
-    this.div.style.borderStyle = 'none';
-    this.div.style.borderWidth = '0px';
-    this.div.style.position = 'absolute';
-    this.div.id = 'GoogleClustrOverlay';
-
-    const panes = this.getPanes();
-
-    panes.overlayLayer.appendChild(this.div);
-  }
-  draw() {
-    const overlayProjection = this.getProjection();
-    const sw = overlayProjection.fromLatLngToDivPixel(
-      this.bounds.getSouthWest()
-    );
-    const ne = overlayProjection.fromLatLngToDivPixel(
-      this.bounds.getNorthEast()
-    );
-    if (this.div) {
-      this.div.style.left = sw.x + 'px';
-      this.div.style.top = ne.y + 'px';
-      this.div.style.width = ne.x - sw.x + 'px';
-      this.div.style.height = sw.y - ne.y + 'px';
-    }
-  }
-
-  onRemove() {
-    if (this.div) {
-      this.div.parentNode.removeChild(this.div);
-      delete this.div;
-    }
-  }
+// Constructor.
+function OverlayContainer(map) {
+  this.map = map;
 }
+
+// Per Google spec, ne OverlayView on the prototype.
+OverlayContainer.prototype = new google.maps.OverlayView();
+
+// Api called when setMap(null) is called
+OverlayContainer.prototype.onRemove = function () {
+  this.div.parentNode.removeChild(this.div);
+  this.div = null;
+};
+
+// Api called when obj.setMap(map instance) is called.
+OverlayContainer.prototype.onAdd = function () {
+  this.div = document.createElement('div');
+  this.div.style.position = 'absolute';
+  this.div.id = 'GoogleClustrOverlay';
+  var panes = this.getPanes();
+  panes.overlayImage.appendChild(this.div);
+};
+
+// Api called when element is appended. Logic assures that the overlay will always be at 0/0 if the map.
+OverlayContainer.prototype.draw = function () {
+  var overlayProjection = this.getProjection();
+  var sw = overlayProjection.fromLatLngToDivPixel(
+    this.map.getBounds().getSouthWest()
+  );
+  var ne = overlayProjection.fromLatLngToDivPixel(
+    this.map.getBounds().getNorthEast()
+  );
+  this.div.style.left = sw.x + 'px';
+  this.div.style.top = ne.y + 'px';
+};
+
+module.exports = OverlayContainer;
