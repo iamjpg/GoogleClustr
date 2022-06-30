@@ -37,9 +37,9 @@ export class GoogleClustr {
   constructor(options: MapOptions) {
     this.map = options.map;
     this.mapContainer = options.mapContainer || 'map';
-    this.clusterRange = options.clusterRange || 150;
+    this.clusterRange = options.clusterRange || 200;
     this.threshold = options.threshold || 200;
-    this.clusterRgba = options.clusterRgba || '255, 0, 217, 0.8';
+    this.clusterRgba = options.clusterRgba || '182, 0, 155, 1';
     this.clusterBorder = options.clusterBorder || '5px solid #ccc';
     this.polygonStrokeColor = options.polygonStrokeColor || '#336699';
     this.polygonStrokeOpacity = options.polygonStrokeOpacity || '0.5';

@@ -2,13 +2,13 @@ export class Helpers {
   constructor() {}
 
   clone(o) {
-    var n = {}.toString.apply(o) == '[object Array]' ? [] : {};
-    for (var i in o) n[i] = typeof o[i] == 'object' ? this.clone(o[i]) : o[i];
+    const n = {}.toString.apply(o) == '[object Array]' ? [] : {};
+    for (let i in o) n[i] = typeof o[i] == 'object' ? this.clone(o[i]) : o[i];
     return n;
   }
 
   returnClusterClassObject(length) {
-    var classSize, offset;
+    let classSize, offset;
     if (length >= 3) {
       classSize = 'large';
       offset = 25;
@@ -27,9 +27,9 @@ export class Helpers {
   }
 
   returnMapProjections(map) {
-    if (!map) return;
+    if (typeof map === 'undefined') return;
 
-    var bounds = new google.maps.LatLngBounds(),
+    const bounds = new google.maps.LatLngBounds(),
       projection = map.getProjection();
 
     return {
