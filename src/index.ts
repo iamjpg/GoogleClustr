@@ -1,3 +1,4 @@
+import cssString from 'bundle-text:./pointCluster.scss';
 import * as d3 from 'd3';
 import {
   MapOptions,
@@ -42,8 +43,15 @@ export class GoogleClustr {
     for (let key in options) {
       this[key] = options[key];
     }
+    this.addCssToDocument(cssString);
     this.createOverlay();
     this.setMapEvents();
+  }
+
+  addCssToDocument(css: string) {
+    var style = document.createElement('style');
+    style.innerText = css;
+    document.head.appendChild(style);
   }
 
   setMapEvents() {

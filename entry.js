@@ -1,4 +1,4 @@
-import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
+import { GoogleClustr } from './dist/module/index.js';
 
 (async () => {
   const options = {
