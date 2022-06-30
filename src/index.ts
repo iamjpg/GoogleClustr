@@ -9,10 +9,12 @@ import {
 import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
+import { Polygon } from './lib/polygon';
 
 declare var google: any;
 
 const helpers = new Helpers();
+const polygon = new Polygon();
 
 export class GoogleClustr {
   map: any;
@@ -57,17 +59,17 @@ export class GoogleClustr {
   setMapEvents() {
     google.maps.event.addListener(this.map, 'idle', () => {
       if (this.collection) {
-        this.removePolygon();
+        polygon.removePolygon();
         this.removeElements();
         this.print();
       }
     });
     google.maps.event.addListener(this.map, 'dragstart', () => {
-      this.removePolygon();
+      polygon.removePolygon();
       this.removeElements();
     });
     google.maps.event.addListener(this.map, 'zoom_changed', () => {
-      this.removePolygon();
+      polygon.removePolygon();
       this.removeElements();
     });
   }
@@ -198,10 +200,10 @@ export class GoogleClustr {
 
   setClusterEvents(el: HTMLElement) {
     el.onmouseover = () => {
-      this.showPolygon(el);
+      polygon.showPolygon(el, this.collection, this.map);
     };
     el.onmouseout = () => {
-      this.removePolygon();
+      polygon.removePolygon();
     };
     el.onclick = () => {
       this.zoomToFit(el);
@@ -237,49 +239,6 @@ export class GoogleClustr {
       self.map.setCenter(new google.maps.LatLng(center_lat, center_lng));
       self.map.setZoom(current_zoom + 1);
     });
-  }
-
-  showPolygon(el: HTMLElement) {
-    var collectionIds = el.dataset.latlngids.split(',');
-
-    // Push the first lat/lng point to the end to close the polygon.
-    collectionIds.push(collectionIds[0]);
-
-    var points = [];
-
-    collectionIds.forEach((o) => {
-      var pointer = this.collection[parseInt(o)];
-      points.push({
-        x: pointer.lat,
-        y: pointer.lng,
-      });
-    });
-
-    points = convexHull(points);
-
-    points = points.map((item) => {
-      return {
-        lat: item.x,
-        lng: item.y,
-      };
-    });
-
-    this.polygon = new google.maps.Polygon({
-      paths: points,
-      strokeColor: this.polygonStrokeColor,
-      strokeOpacity: this.polygonStrokeOpacity,
-      strokeWeight: this.polygonStrokeWeight,
-      fillColor: this.polygonFillColor,
-      fillOpacity: this.polygonFillOpacity,
-    });
-
-    this.polygon.setMap(this.map);
-  }
-
-  removePolygon() {
-    if (this.polygon) {
-      this.polygon.setMap(null);
-    }
   }
 
   checkIfLatLngInBounds() {
