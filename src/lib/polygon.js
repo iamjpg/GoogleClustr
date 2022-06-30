@@ -11,13 +11,13 @@ export class Polygon {
 
     var points = [];
 
-    collectionIds.forEach((o) => {
-      var pointer = collection[parseInt(o)];
+    for (let i = 0; i < collectionIds.length; i++) {
+      const pointer = collection[collectionIds[i]];
       points.push({
         x: pointer.lat,
         y: pointer.lng,
       });
-    });
+    }
 
     points = convexHull(points);
 
