@@ -60,4 +60,61 @@ export class Helpers {
       return [x, y, i];
     });
   }
+
+  getCenterPoints(quadtree, mapContainer, clusterRange) {
+    console.log(quadtree);
+    const clusterPoints = [];
+
+    for (
+      let x = 0;
+      x <= document.getElementById(mapContainer).offsetWidth;
+      x += clusterRange
+    ) {
+      for (
+        let y = 0;
+        y <= document.getElementById(mapContainer).offsetHeight;
+        y += clusterRange
+      ) {
+        const searched = this.searchQuadTree(
+          quadtree,
+          x,
+          y,
+          x + clusterRange,
+          y + clusterRange
+        );
+
+        const centerPoint = searched.reduce(
+          function (prev, current) {
+            return [prev[0] + current[0], prev[1] + current[1]];
+          },
+          [0, 0]
+        );
+
+        centerPoint[0] = centerPoint[0] / searched.length;
+        centerPoint[1] = centerPoint[1] / searched.length;
+        centerPoint.push(searched);
+
+        if (centerPoint[0] && centerPoint[1]) {
+          clusterPoints.push(centerPoint);
+        }
+      }
+    }
+
+    return clusterPoints;
+  }
+
+  searchQuadTree(quadtree, x0, y0, x3, y3) {
+    const validData = [];
+    quadtree.visit(function (node, x1, y1, x2, y2) {
+      const p = node.point;
+      if (p) {
+        p.selected = p[0] >= x0 && p[0] < x3 && p[1] >= y0 && p[1] < y3;
+        if (p.selected) {
+          validData.push(p);
+        }
+      }
+      return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
+    });
+    return validData;
+  }
 }
