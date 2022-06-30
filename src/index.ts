@@ -19,19 +19,19 @@ const polygon = new Polygon();
 export class GoogleClustr {
   map: any;
   collection: CollectionObject;
-  mapContainer: string;
+  mapContainer: string = 'map';
   pointsRawLatLng: object;
-  clusterRange: number;
-  threshold: number;
-  clusterRgba: string;
-  clusterBorder: string;
-  polygonStrokeColor: string;
-  polygonStrokeOpacity: string | number;
-  polygonStrokeWeight: string | number;
-  polygonFillColor: string;
-  polygonFillOpacity: string | number;
-  customPinHoverBehavior: boolean;
-  customPinClickBehavior: boolean;
+  clusterRange: number = 200;
+  threshold: number = 200;
+  clusterRgba: string = '182, 0, 155, 1';
+  clusterBorder: string = '5px solid #ccc';
+  polygonStrokeColor: string = '#336699';
+  polygonStrokeOpacity: string | number = '0.5';
+  polygonStrokeWeight: string | number = '4';
+  polygonFillColor: string = '#336699';
+  polygonFillOpacity: string | number = '0.2';
+  customPinHoverBehavior: boolean = false;
+  customPinClickBehavior: boolean = false;
   overlay: any;
   mapContainerElem: HTMLElement;
   points: any;
@@ -39,19 +39,9 @@ export class GoogleClustr {
   helpers: typeof Helpers;
 
   constructor(options: MapOptions) {
-    this.map = options.map;
-    this.mapContainer = options.mapContainer || 'map';
-    this.clusterRange = options.clusterRange || 200;
-    this.threshold = options.threshold || 200;
-    this.clusterRgba = options.clusterRgba || '182, 0, 155, 1';
-    this.clusterBorder = options.clusterBorder || '5px solid #ccc';
-    this.polygonStrokeColor = options.polygonStrokeColor || '#336699';
-    this.polygonStrokeOpacity = options.polygonStrokeOpacity || '0.5';
-    this.polygonStrokeWeight = options.polygonStrokeWeight || '4';
-    this.polygonFillColor = options.polygonFillColor || '#336699';
-    this.polygonFillOpacity = options.polygonFillOpacity || '0.2';
-    this.customPinHoverBehavior = options.customPinHoverBehavior || false;
-    this.customPinClickBehavior = options.customPinClickBehavior || false;
+    for (const [key, value] of Object.entries(options)) {
+      this[key] = value;
+    }
     this.createOverlay();
     this.setMapEvents();
   }
@@ -97,8 +87,6 @@ export class GoogleClustr {
       this.clusterRange
     );
 
-    console.log(centerPoints);
-
     if (this.points) {
       this.points.remove();
     }
@@ -119,9 +107,8 @@ export class GoogleClustr {
     }
   }
 
-  paint(centerPoints) {
+  paint(centerPoints: number[]) {
     if (this.checkIfLatLngInBounds().length <= this.threshold) {
-      // Do some work to get points and then...
       console.log('print points!');
     } else {
       this.paintClustersToCanvas(centerPoints);
@@ -176,16 +163,12 @@ export class GoogleClustr {
       const x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
       const y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
 
+      const clusterLength = clusterCount.toString().length;
+
       div.style.left =
-        x -
-        helpers.returnClusterClassObject(clusterCount.toString().length)
-          .offSet +
-        'px';
+        x - helpers.returnClusterClassObject(clusterLength).offSet + 'px';
       div.style.top =
-        y -
-        helpers.returnClusterClassObject(clusterCount.toString().length)
-          .offSet +
-        'px';
+        y - helpers.returnClusterClassObject(clusterLength).offSet + 'px';
 
       // END - Center cluster icon inside of Polygon.
 

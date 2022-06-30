@@ -62,7 +62,6 @@ export class Helpers {
   }
 
   getCenterPoints(quadtree, mapContainer, clusterRange) {
-    console.log(quadtree);
     const clusterPoints = [];
 
     for (
