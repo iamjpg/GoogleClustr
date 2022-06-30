@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import { GOOGLE_KEY as gk } from './google-key';
 import {
   MapOptions,
   CollectionObject,
@@ -92,9 +91,9 @@ export class GoogleClustr {
     }
 
     const overlayInterval = setInterval(() => {
-      if (document.querySelector('#GoogleClustrOverlay')) {
+      this.mapContainerElem = document.querySelector('#GoogleClustrOverlay');
+      if (this.mapContainerElem) {
         clearInterval(overlayInterval);
-        this.mapContainerElem = document.querySelector('#GoogleClustrOverlay');
         this.paint(centerPoints);
       }
     }, 10);
@@ -190,12 +189,11 @@ export class GoogleClustr {
   }
 
   zoomToFit(el: HTMLElement) {
-    var self = this;
-    var collectionIds = el.dataset.latlngids.split(',');
-    var points = [];
-    var points_alt = [];
-    collectionIds.forEach(function (o, i) {
-      var pointer = self.collection[parseInt(o)];
+    const collectionIds = el.dataset.latlngids.split(',');
+    const points = [];
+    let points_alt = [];
+    collectionIds.forEach((o, i) => {
+      var pointer = this.collection[parseInt(o)];
       points_alt.push({
         x: pointer.lat,
         y: pointer.lng,
@@ -205,7 +203,7 @@ export class GoogleClustr {
     points_alt.forEach(function (o, i) {
       points.push(new google.maps.LatLng(o.x, o.y));
     });
-    var latlngbounds = new google.maps.LatLngBounds();
+    const latlngbounds = new google.maps.LatLngBounds();
     for (var i = 0; i < points.length; i++) {
       latlngbounds.extend(points[i]);
     }
@@ -214,9 +212,9 @@ export class GoogleClustr {
       // self.map.fitBounds(latlngbounds);
       const center_lat = latlngbounds.getCenter().lat();
       const center_lng = latlngbounds.getCenter().lng();
-      const current_zoom = self.map.getZoom();
-      self.map.setCenter(new google.maps.LatLng(center_lat, center_lng));
-      self.map.setZoom(current_zoom + 1);
+      const current_zoom = this.map.getZoom();
+      this.map.setCenter(new google.maps.LatLng(center_lat, center_lng));
+      this.map.setZoom(current_zoom + 1);
     });
   }
 
@@ -234,5 +232,3 @@ export class GoogleClustr {
     return arr;
   }
 }
-
-export const GOOGLE_KEY = gk;
