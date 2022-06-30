@@ -208,7 +208,7 @@ export class GoogleClustr {
       latlngbounds.extend(points[i]);
     }
 
-    requestAnimationFrame(function () {
+    requestAnimationFrame(() => {
       // self.map.fitBounds(latlngbounds);
       const center_lat = latlngbounds.getCenter().lat();
       const center_lng = latlngbounds.getCenter().lng();
