@@ -75,6 +75,7 @@ export class GoogleClustr {
 
   setCollection(collection: CollectionObject) {
     this.collection = collection;
+    this.print();
   }
 
   createOverlay() {

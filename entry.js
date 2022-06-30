@@ -6,7 +6,6 @@ import { GoogleClustr } from './dist/module/index.js';
     zoom: 6,
     clickableIcons: false,
     controlSize: 20,
-    disableDoubleClickZoom: true,
   };
 
   const map = new google.maps.Map(document.getElementById('map'), options);
@@ -22,5 +21,4 @@ import { GoogleClustr } from './dist/module/index.js';
   });
 
   gc.setCollection(json.data.result_list);
-  gc.print();
 })();
