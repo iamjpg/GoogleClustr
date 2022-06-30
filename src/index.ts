@@ -36,6 +36,7 @@ export class GoogleClustr {
   points: any;
   polygon: any;
   helpers: typeof Helpers;
+  fitBounds: boolean = true;
 
   constructor(options: MapOptions) {
     for (let key in options) {
@@ -209,12 +210,15 @@ export class GoogleClustr {
     }
 
     requestAnimationFrame(() => {
-      // self.map.fitBounds(latlngbounds);
-      const center_lat = latlngbounds.getCenter().lat();
-      const center_lng = latlngbounds.getCenter().lng();
-      const current_zoom = this.map.getZoom();
-      this.map.setCenter(new google.maps.LatLng(center_lat, center_lng));
-      this.map.setZoom(current_zoom + 1);
+      if (this.fitBounds) {
+        this.map.fitBounds(latlngbounds);
+      } else {
+        const center_lat = latlngbounds.getCenter().lat();
+        const center_lng = latlngbounds.getCenter().lng();
+        const current_zoom = this.map.getZoom();
+        this.map.setCenter(new google.maps.LatLng(center_lat, center_lng));
+        this.map.setZoom(current_zoom + 1);
+      }
     });
   }
 

@@ -18,6 +18,7 @@ import { GOOGLE_KEY, GoogleClustr } from './dist/module/index.js';
   const gc = new GoogleClustr({
     map,
     mapContainer: 'map',
+    fitBounds: true,
   });
 
   gc.setCollection(json.data.result_list);
