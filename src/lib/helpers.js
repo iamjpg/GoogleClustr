@@ -40,4 +40,24 @@ export class Helpers {
       scale: Math.pow(2, map.getZoom()),
     };
   }
+
+  returnPointsRaw(map, collection) {
+    // Projection variables.
+    const mapProjections = this.returnMapProjections(map);
+
+    this.pointsRawLatLng = [];
+
+    return collection.map(function (o, i) {
+      // Create our point.
+      const point = mapProjections.projection.fromLatLngToPoint(
+        new google.maps.LatLng(o.lat, o.lng)
+      );
+
+      // Get the x/y based on the scale.
+      const x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
+      const y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
+
+      return [x, y, i];
+    });
+  }
 }

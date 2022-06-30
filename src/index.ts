@@ -12,6 +12,8 @@ import convexHull from './lib/convexHull';
 
 declare var google: any;
 
+const helpers = new Helpers();
+
 export class GoogleClustr {
   map: any;
   collection: CollectionObject;
@@ -48,7 +50,6 @@ export class GoogleClustr {
     this.polygonFillOpacity = options.polygonFillOpacity || '0.2';
     this.customPinHoverBehavior = options.customPinHoverBehavior || false;
     this.customPinClickBehavior = options.customPinClickBehavior || false;
-    this.helpers = new Helpers();
     this.createOverlay();
     this.setMapEvents();
   }
@@ -85,7 +86,9 @@ export class GoogleClustr {
 
   print() {
     // create quadtree, and get centerpoints.
-    const quadtree = d3.geom.quadtree()(this.returnPointsRaw());
+    const quadtree = d3.geom.quadtree()(
+      helpers.returnPointsRaw(this.map, this.collection)
+    );
     const centerPoints = this.getCenterPoints(quadtree);
 
     if (this.points) {
@@ -127,7 +130,7 @@ export class GoogleClustr {
       const div = document.createElement('div');
       div.className =
         'point-cluster ' +
-        this.helpers.returnClusterClassObject(clusterCount.toString().length)
+        helpers.returnClusterClassObject(clusterCount.toString().length)
           .classSize;
       div.style.backgroundColor = 'rgba(' + this.clusterRgba + ')';
       div.dataset.positionid = i;
@@ -141,7 +144,7 @@ export class GoogleClustr {
 
       const polygonCoords: number[] = [];
       let pi: number;
-      const mapProjections: MapProjections = this.helpers.returnMapProjections(
+      const mapProjections: MapProjections = helpers.returnMapProjections(
         this.map
       );
 
@@ -167,12 +170,12 @@ export class GoogleClustr {
 
       div.style.left =
         x -
-        this.helpers.returnClusterClassObject(clusterCount.toString().length)
+        helpers.returnClusterClassObject(clusterCount.toString().length)
           .offSet +
         'px';
       div.style.top =
         y -
-        this.helpers.returnClusterClassObject(clusterCount.toString().length)
+        helpers.returnClusterClassObject(clusterCount.toString().length)
           .offSet +
         'px';
 
@@ -275,7 +278,7 @@ export class GoogleClustr {
 
   checkIfLatLngInBounds() {
     const self = this;
-    const arr = this.helpers.clone(this.collection);
+    const arr = helpers.clone(this.collection);
     for (let i = 0; i < arr.length; ++i) {
       let lat = arr[i].lat || arr[i].location.latitude;
       let lng = arr[i].lng || arr[i].location.longitude;
@@ -341,26 +344,6 @@ export class GoogleClustr {
       return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
     });
     return validData;
-  }
-
-  returnPointsRaw() {
-    // Projection variables.
-    const mapProjections = this.helpers.returnMapProjections(this.map);
-
-    this.pointsRawLatLng = [];
-
-    return this.collection.map(function (o: CollectionObject, i: number) {
-      // Create our point.
-      const point = mapProjections.projection.fromLatLngToPoint(
-        new google.maps.LatLng(o.lat, o.lng)
-      );
-
-      // Get the x/y based on the scale.
-      const x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
-      const y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
-
-      return [x, y, i];
-    });
   }
 }
 
