@@ -39,8 +39,8 @@ export class GoogleClustr {
   helpers: typeof Helpers;
 
   constructor(options: MapOptions) {
-    for (const [key, value] of Object.entries(options)) {
-      this[key] = value;
+    for (let key in options) {
+      this[key] = options[key];
     }
     this.createOverlay();
     this.setMapEvents();
@@ -115,27 +115,27 @@ export class GoogleClustr {
     }
   }
 
-  paintClustersToCanvas(points) {
+  paintClustersToCanvas(points: string | any[]) {
     const frag = document.createDocumentFragment();
 
-    // Loop over points assessing
-    points.forEach((o: any[][], i: string) => {
-      const clusterCount = o[2].length;
+    for (let i = 0; i < points.length; i++) {
+      const clusterCount = points[i][2].length;
+      const clusterLength = clusterCount.toString().length;
 
       const div = document.createElement('div');
+
       div.className =
         'point-cluster ' +
-        helpers.returnClusterClassObject(clusterCount.toString().length)
-          .classSize;
+        helpers.returnClusterClassObject(clusterLength).classSize;
+
       div.style.backgroundColor = 'rgba(' + this.clusterRgba + ')';
-      div.dataset.positionid = i;
-      const latLngPointerArray = [];
+      div.dataset.positionid = i.toString();
 
-      o[2].forEach(function (a, b) {
-        latLngPointerArray.push(a[2]);
-      });
+      const latLngPointerArray: number[] = [];
 
-      // START - Center cluster icon inside of Polygon.
+      for (let x = 0; x < points[i][2].length; x++) {
+        latLngPointerArray.push(points[i][2][x][2]);
+      }
 
       const polygonCoords: number[] = [];
       let pi: number;
@@ -143,10 +143,10 @@ export class GoogleClustr {
         this.map
       );
 
-      latLngPointerArray.forEach((o) => {
-        const pointer = this.collection[parseInt(o)];
+      for (let n = 0; n < latLngPointerArray.length; n++) {
+        const pointer = this.collection[latLngPointerArray[n]];
         polygonCoords.push(new google.maps.LatLng(pointer.lat, pointer.lng));
-      });
+      }
 
       for (pi = 0; pi < polygonCoords.length; pi++) {
         mapProjections.bounds.extend(polygonCoords[pi]);
@@ -163,20 +163,16 @@ export class GoogleClustr {
       const x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
       const y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
 
-      const clusterLength = clusterCount.toString().length;
-
       div.style.left =
         x - helpers.returnClusterClassObject(clusterLength).offSet + 'px';
       div.style.top =
         y - helpers.returnClusterClassObject(clusterLength).offSet + 'px';
 
-      // END - Center cluster icon inside of Polygon.
-
       div.dataset.latlngids = latLngPointerArray.join(',');
       div.innerHTML = clusterCount.toString();
       frag.appendChild(div);
       this.setClusterEvents(div);
-    });
+    }
 
     this.mapContainerElem.appendChild(frag);
   }
