@@ -12,7 +12,7 @@ export class Helpers {
     if (length >= 3) {
       classSize = 'large';
       offset = 25;
-    } else if (length == 2) {
+    } else if (length === 2) {
       classSize = 'medium';
       offset = 20;
     } else {

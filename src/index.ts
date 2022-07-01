@@ -1,4 +1,4 @@
-import GoogleClustrStyles from 'bundle-text:./pointCluster.scss';
+import './css/pointCluster.css';
 import * as d3 from 'd3';
 import {
   MapOptions,
@@ -10,11 +10,20 @@ import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
 import { Polygon } from './lib/polygon';
+import { Point } from './lib/Point';
+import GoogleClustrPubSub from 'vanilla-pubsub';
 
 declare var google: any;
+declare global {
+  interface Window {
+    example: string;
+    GoogleClustrPubSub: any;
+  }
+}
 
 const helpers = new Helpers();
 const polygon = new Polygon();
+window.GoogleClustrPubSub = GoogleClustrPubSub;
 
 export class GoogleClustr {
   map: any;
@@ -43,15 +52,9 @@ export class GoogleClustr {
     for (let key in options) {
       this[key] = options[key];
     }
-    this.addCssToDocument(GoogleClustrStyles);
+
     this.createOverlay();
     this.setMapEvents();
-  }
-
-  addCssToDocument(css: string) {
-    var style = document.createElement('style');
-    style.innerText = css;
-    document.head.appendChild(style);
   }
 
   setMapEvents() {
@@ -119,7 +122,14 @@ export class GoogleClustr {
 
   paint(centerPoints: number[]) {
     if (this.checkIfLatLngInBounds().length <= this.threshold) {
-      console.log('print points!');
+      this.overlay.setMap(null);
+      this.points = new Point(
+        this.map,
+        this.checkIfLatLngInBounds(),
+        this.customPinClickBehavior,
+        this.customPinHoverBehavior
+      );
+      this.points.print();
     } else {
       this.paintClustersToCanvas(centerPoints);
     }
