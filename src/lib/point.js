@@ -1,3 +1,4 @@
+import debounce from 'lodash.debounce';
 import uuid from 'short-uuid';
 import MarkerWithLabel from './markerwithlabel';
 import OverlappingMarkerSpiderfier from './spider-marker';
@@ -85,29 +86,29 @@ export class Point {
           labelClass: marker.labelClass.replace(' fadePins', ''),
         });
       });
+      self.removeListeners();
       self.setHoverEvents(false);
     });
   }
 
-  setHoverEvents(ignoreZindex = false) {
-    if (this.customPinHoverBehavior) {
-      return false;
-    }
-
+  setHoverEvents = debounce((ignoreZindex = false) => {
     const self = this;
+    this.setClickEvents();
     this.markers.forEach(function (marker) {
-      let mouseOverListener = marker.addListener('mouseover', function (e) {
-        let target = e.target || e.srcElement;
-        let m = this;
-        marker.setOptions({
-          zIndex: 10000,
-          labelClass: this.labelClass + ' PointHoverState',
-        });
+      let mouseOverListener = marker.addListener(
+        'mouseover',
+        function ({ target }) {
+          GoogleClustrPubSub.publish('hover', target);
+          marker.setOptions({
+            zIndex: 10000,
+            labelClass: this.labelClass + ' PointHoverState',
+          });
 
-        if (!ignoreZindex) {
-          this.setZIndex(5000);
+          if (!ignoreZindex) {
+            this.setZIndex(5000);
+          }
         }
-      });
+      );
 
       let mouseOutListener = marker.addListener('mouseout', function () {
         marker.setOptions({
@@ -122,7 +123,20 @@ export class Point {
       self.markerListeners.push(mouseOverListener);
       self.markerListeners.push(mouseOutListener);
     });
-  }
+  }, 250);
+
+  setClickEvents = debounce(() => {
+    const self = this;
+    this.markers.forEach(function (marker) {
+      let mouseClickListener = marker.addListener(
+        'click',
+        function ({ target }) {
+          GoogleClustrPubSub.publish('click', target);
+        }
+      );
+      self.markerListeners.push(mouseClickListener);
+    });
+  }, 250);
 
   removeUniversalPointHoverState() {
     this.markers.forEach((o, i) => {

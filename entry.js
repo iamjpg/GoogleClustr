@@ -31,4 +31,11 @@ import { GoogleClustr } from './dist/module/index.js';
   });
 
   gc.setCollection(json.data.result_list);
+
+  GoogleClustrPubSub.subscribe('click', (target) => {
+    console.log('click', target);
+  });
+  GoogleClustrPubSub.subscribe('hover', (target) => {
+    console.log('hover', target);
+  });
 })();
