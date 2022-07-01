@@ -42,9 +42,17 @@ header {
   }
 }
 
-#mapContainer {
+.countContainer {
   max-width: 800px;
   margin: 50px auto 0 auto;
+  background: #b6009b;
+  color: #fff;
+  padding: 20px;
+}
+
+#mapContainer {
+  max-width: 800px;
+  margin: auto;
   background: #fff;
   min-height: $map-height;
   box-shadow: 15px 15px 0px 0px #ccc;
@@ -57,7 +65,15 @@ header {
 footer {
   margin-top: 100px;
   div {
-    text-align: center;
     font-size: $small-font;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center; /* flex-start, flex-end, center, space-between, space-around, space-evenly */
+    align-items: center;
+
+    img {
+      margin: 0 8px;
+    }
   }
 }
