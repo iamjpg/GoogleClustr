@@ -2,13 +2,16 @@ import { GoogleClustr } from './dist/module/index.js';
 
 (async () => {
   const options = {
-    center: { lat: 37.76487, lng: -122.41948 },
-    zoom: 6,
+    center: { lat: 42.231497689642886, lng: -120.84795105859376 },
+    zoom: 9,
     clickableIcons: false,
     controlSize: 20,
   };
 
-  const map = new google.maps.Map(document.getElementById('map'), options);
+  const map = (window.map = new google.maps.Map(
+    document.getElementById('map'),
+    options
+  ));
 
   const json = await fetch(
     'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'

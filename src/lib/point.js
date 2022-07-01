@@ -1,5 +1,7 @@
-// Import the MarkerWithLabel library.
-import MarkerWithLabel from 'markerwithlabel';
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import uuid from 'short-uuid';
+import MarkerWithLabel from './markerwithlabel';
 import OverlappingMarkerSpiderfier from './spider-marker';
 
 export class Point {
@@ -27,28 +29,6 @@ export class Point {
     });
   }
 
-  returnHoverTemplate() {
-    const template = `
-      <div id="popper-container">
-        <div class="arrow_box">
-
-        </div>
-      </div>
-    `;
-    return template;
-  }
-
-  returnClickTemplate() {
-    const template = `
-      <div id="popper-container-clicked">
-        <div class="arrow_box_clicked">
-
-        </div>
-      </div>
-    `;
-    return template;
-  }
-
   // Document click is to simply remove a clicked popper if user
   // clicks away.
   setDocumentClick() {
@@ -56,7 +36,7 @@ export class Point {
     document.addEventListener('click', function (e) {
       const target = e.target;
       if (target.className.indexOf('clicked') === -1) {
-        self.removePopper(true);
+        // self.removePopper(true);
       }
     });
   }
@@ -69,6 +49,7 @@ export class Point {
       let lat = o.lat || o.location.latitude;
       let lng = o.lng || o.location.longitude;
       let m = new MarkerWithLabel({
+        id: `marker-${uuid.generate()}`,
         position: new google.maps.LatLng(lat, lng),
         map: self.map,
         hoverContent: o.hoverData || '',
@@ -87,20 +68,6 @@ export class Point {
       self.markers.push(m);
 
       self.oms.addMarker(m);
-
-      if (document.querySelector('#popper-container') === null) {
-        const fragHover = document
-          .createRange()
-          .createContextualFragment(self.returnHoverTemplate());
-        self.map.getDiv().appendChild(fragHover);
-      }
-
-      if (document.querySelector('#popper-container-clicked') === null) {
-        const fragClick = document
-          .createRange()
-          .createContextualFragment(self.returnClickTemplate());
-        self.map.getDiv().appendChild(fragClick);
-      }
     });
 
     self.setHoverEvents(false);
@@ -113,13 +80,13 @@ export class Point {
     const self = this;
 
     this.oms.addListener('click', function (marker, event) {
-      self.removePopper();
+      // self.removePopper();
     });
 
     this.oms.addListener('spiderfy', function (markers, event) {
       self.removeUniversalPointHoverState();
       requestAnimationFrame(() => {
-        self.removePopper(true);
+        // self.removePopper(true);
       });
       self.markers.forEach(function (marker) {
         marker.setOptions({
@@ -139,7 +106,7 @@ export class Point {
 
     this.oms.addListener('unspiderfy', function (markers, event) {
       self.removeUniversalPointHoverState();
-      self.removePopper();
+      // self.removePopper();
       self.markers.forEach(function (marker) {
         marker.setOptions({
           zIndex: 1000,
@@ -208,7 +175,7 @@ export class Point {
     this.markers.forEach(function (marker) {
       let mouseOverListener = marker.addListener('mouseover', function (e) {
         // Remove clicked poppers.
-        self.removePopper(true);
+        // self.removePopper(true);
 
         let target = e.target || e.srcElement;
         let m = this;
@@ -223,45 +190,9 @@ export class Point {
           return false;
         }
 
-        // Pointers
-        let map = this.map;
-
-        // Get projection data
-        let projection = map.getProjection();
-        let topRight = projection.fromLatLngToPoint(
-          map.getBounds().getNorthEast()
-        );
-        let bottomLeft = projection.fromLatLngToPoint(
-          map.getBounds().getSouthWest()
-        );
-        let scale = Math.pow(2, map.getZoom());
-
-        // Create point
-        var point = projection.fromLatLngToPoint(
-          new google.maps.LatLng(
-            m.internalPosition.lat(),
-            m.internalPosition.lng()
-          )
-        );
-
-        // Show the bubble
-        let elem = document.querySelector('#popper-container');
-        let inner = document.querySelector('.arrow_box');
-        inner.innerHTML = m.get('hoverContent');
-        elem.style.display = 'block';
-
-        // Get the x/y based on the scale.
-        let containerHeight = elem.offsetHeight;
-        let containerWidth = elem.offsetWidth;
-        var posLeft = parseInt(
-          (point.x - bottomLeft.x) * scale - (containerWidth / 2 + 2)
-        );
-        var posTop = parseInt(
-          (point.y - topRight.y) * scale - (20 + containerHeight)
-        );
-
-        elem.style.top = `${posTop}px`;
-        elem.style.left = `${posLeft}px`;
+        tippy(`#${target.id}`, {
+          content: m.get('hoverContent'),
+        });
 
         if (!ignoreZindex) {
           this.setZIndex(5000);
@@ -274,7 +205,7 @@ export class Point {
           zIndex: 100,
           labelClass: this.labelClass.replace(' PointHoverState', ''),
         });
-        self.removePopper();
+        // self.removePopper();
         if (!ignoreZindex) {
           this.setZIndex(1000);
         }
@@ -298,7 +229,7 @@ export class Point {
         }
 
         // Remove any clicked poppers...
-        self.removePopper(true);
+        // self.removePopper(true);
 
         let target = e.target || e.srcElement;
         let m = this;
@@ -363,17 +294,6 @@ export class Point {
     this.removeListeners();
     for (var i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(null);
-    }
-  }
-
-  // Remove the poppers either hover or click.
-  removePopper(clicked = false) {
-    let popper = document.querySelector('#popper-container');
-    popper.style.display = 'none';
-
-    if (clicked) {
-      let popper_clicked = document.querySelector('#popper-container-clicked');
-      popper_clicked.style.display = 'none';
     }
   }
 }

@@ -32,6 +32,8 @@
     "d3": "3.5.17",
     "google-maps": "^4.3.3",
     "markerwithlabel": "^1.1.6",
+    "short-uuid": "^4.2.0",
+    "tippy.js": "^6.3.7",
     "vanilla-pubsub": "^1.1.2"
   }
 }
