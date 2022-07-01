@@ -637,6 +637,13 @@
     "@parcel/workers" "2.6.2"
     nullthrows "^1.1.1"
 
+"@parcel/transformer-inline-string@2.6.2":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@parcel/transformer-inline-string/-/transformer-inline-string-2.6.2.tgz#bda552fed9faa1fb2afbbe9f26d963b1a2e6470c"
+  integrity sha512-g+qUjzaLc9i6lxhMb32kjD5fSRTVkKT3+sxETSJGYus/3HhgcLUED2rVHTGMsPj2UX5B5oLKXrnE+P+vfji3HQ==
+  dependencies:
+    "@parcel/plugin" "2.6.2"
+
 "@parcel/transformer-js@2.6.2":
   version "2.6.2"
   resolved "https://registry.npmjs.org/@parcel/transformer-js/-/transformer-js-2.6.2.tgz"
@@ -1630,6 +1637,11 @@ lodash@^4.17.14, lodash@^4.17.4:
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
+markerwithlabel@^1.1.6:
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/markerwithlabel/-/markerwithlabel-1.1.16.tgz#04b60bb3c335502d4ea589f404fdbd2bd1872d3b"
+  integrity sha512-UbF8en4fH7wBWTrNSDPfhsO9GT4pWFkoGq188NeBrpNo0Er/eeoWZjThoUlpqyaqGoSnNhfAg0rfzOn+cEzE4w==
+
 mdn-data@2.0.14:
   version "2.0.14"
   resolved "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.14.tgz"
@@ -2255,6 +2267,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+vanilla-pubsub@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/vanilla-pubsub/-/vanilla-pubsub-1.1.2.tgz#19e180f7e01c4e9548a7349a8b2a5587f8848da7"
+  integrity sha512-unLf9tR1qJ90Dwk3BJtEORtRslVJhDMUIS7DKmbOBCFgAoAOLkdlCZpRHJAjD+N/mibr8p7GlpC98coaG4NrBg==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"

@@ -10,11 +10,20 @@ import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
 import { Polygon } from './lib/polygon';
+import { Point } from './lib/Point';
+import GoogleClustrPubSub from 'vanilla-pubsub';
 
 declare var google: any;
+declare global {
+  interface Window {
+    example: string;
+    GoogleClustrPubSub: any;
+  }
+}
 
 const helpers = new Helpers();
 const polygon = new Polygon();
+window.GoogleClustrPubSub = GoogleClustrPubSub;
 
 export class GoogleClustr {
   map: any;
@@ -119,7 +128,14 @@ export class GoogleClustr {
 
   paint(centerPoints: number[]) {
     if (this.checkIfLatLngInBounds().length <= this.threshold) {
-      console.log('print points!');
+      this.overlay.setMap(null);
+      this.points = new Point(
+        this.map,
+        this.checkIfLatLngInBounds(),
+        this.customPinClickBehavior,
+        this.customPinHoverBehavior
+      );
+      this.points.print();
     } else {
       this.paintClustersToCanvas(centerPoints);
     }

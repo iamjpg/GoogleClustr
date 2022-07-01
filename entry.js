@@ -14,6 +14,13 @@ import { GoogleClustr } from './dist/module/index.js';
     'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'
   ).then((response) => response.json());
 
+  json.data.result_list.forEach(function (o, i) {
+    o.hoverData = o.lat + ' : ' + o.lng;
+    o.dataset = [{ bar: 'boop' }];
+    o.clickData =
+      "You've clicked on this locaton:<br />" + o.lat + ' : ' + o.lng;
+  });
+
   const gc = new GoogleClustr({
     map,
     mapContainer: 'map',
