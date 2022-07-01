@@ -2,8 +2,8 @@ import { GoogleClustr } from './dist/module/index.js';
 
 (async () => {
   const options = {
-    center: { lat: 42.231497689642886, lng: -120.84795105859376 },
-    zoom: 9,
+    center: { lat: 37.76487, lng: -122.41948 },
+    zoom: 6,
     clickableIcons: false,
     controlSize: 20,
   };
