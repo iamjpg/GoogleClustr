@@ -4,7 +4,6 @@ import MarkerWithLabel from './markerwithlabel';
 import OverlappingMarkerSpiderfier from './spider-marker';
 
 export class Point {
-  // Constructor -> { options } object
   constructor(
     map,
     collection,
@@ -55,10 +54,6 @@ export class Point {
 
   setOmsEvents() {
     const self = this;
-
-    this.oms.addListener('click', function (marker, event) {
-      // self.removePopper();
-    });
 
     this.oms.addListener('spiderfy', function (markers, event) {
       self.removeUniversalPointHoverState();
