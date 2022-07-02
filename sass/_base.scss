@@ -125,7 +125,7 @@ header {
 
 footer {
   margin-top: 100px;
-  div {
+  .personal {
     font-size: $small-font;
     display: flex;
     flex-direction: row;
@@ -136,5 +136,11 @@ footer {
     img {
       margin: 0 8px;
     }
+  }
+
+  .credit {
+    margin-top: 10px;
+    font-size: 10px;
+    text-align: center;
   }
 }

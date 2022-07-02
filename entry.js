@@ -2,10 +2,8 @@ import { GoogleClustr } from './src/index.ts';
 
 (async () => {
   const options = {
-    center: { lat: 37.76487, lng: -122.41948 },
-    zoom: 5,
-    // center: { lat: 35.482770252450926, lng: -120.8537 },
-    // zoom: 9,
+    center: { lat: 34.05845309477056, lng: -118.03896754679423 },
+    zoom: 8,
     clickableIcons: false,
     controlSize: 20,
   };
@@ -15,13 +13,40 @@ import { GoogleClustr } from './src/index.ts';
     options
   ));
 
-  const json = await fetch(
-    'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'
+  const schoolsArr = [];
+
+  const schools = await fetch(
+    'https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json'
   ).then((response) => response.json());
 
-  json.data.result_list.forEach(function (o, i) {
-    const { lat, lng } = o;
-    o.dataset = [{ lat }, { lng }];
+  schools.features.forEach((school) => {
+    const {
+      attributes: {
+        latitude,
+        longitude,
+        OBJECTID,
+        Name,
+        addrln1,
+        city,
+        zip,
+        url,
+        phones,
+      },
+    } = school;
+
+    schoolsArr.push({
+      lat: latitude,
+      lng: longitude,
+      id: OBJECTID,
+      dataset: [
+        { name: Name },
+        { address: addrln1 },
+        { city },
+        { zip },
+        { url: url ? url : 'Not Available' },
+        { phones },
+      ],
+    });
   });
 
   const gc = new GoogleClustr({
@@ -30,21 +55,32 @@ import { GoogleClustr } from './src/index.ts';
     fitBounds: true,
   });
 
-  gc.setCollection(json.data.result_list);
+  gc.setCollection(schoolsArr);
 
-  const countContainer = document.querySelector('.countContainer');
+  const countContainer = document.querySelector('.count');
 
   let tippyInstances = [];
   let tippyClickInstances = [];
 
   GcPs.subscribe('click', (target) => {
+    const { dataset } = target;
+
+    const htmlStr = `
+      <strong>${dataset.name}</strong><br />
+      ${dataset.address}<br />
+      ${dataset.city}, ${dataset.zip}<br /><br />
+      <strong>Phones:</strong> ${dataset.phones}<br />
+      <strong>URL:</strong> ${dataset.url}
+    `;
+
     const tippyClickInstance = tippy(`#${target.id}`, {
-      content: "I'm triggered by a click event!",
+      content: htmlStr,
       theme: 'light',
       arrow: true,
       trigger: 'click',
       showOnCreate: true,
       interactive: true,
+      allowHTML: true,
     });
 
     tippyClickInstances.push(tippyClickInstance);
@@ -53,7 +89,7 @@ import { GoogleClustr } from './src/index.ts';
     if (!tippyInstances.includes(target.id)) {
       const { dataset } = target;
       tippy(`#${target.id}`, {
-        content: `Hovering<br /><strong>lat:</strong> ${dataset.lat}, <strong>lng:</strong> ${dataset.lng}`,
+        content: `Hovering over ${dataset.name}`,
         theme: 'light',
         arrow: true,
         showOnCreate: true,
@@ -64,9 +100,7 @@ import { GoogleClustr } from './src/index.ts';
     tippyInstances.push(target.id);
   });
   GcPs.subscribe('count', (count) => {
-    countContainer.innerHTML = `<strong>Current Point Count:</strong> ${count.toLocaleString(
-      'en-US'
-    )}`;
+    countContainer.innerHTML = `${count.toLocaleString('en-US')}`;
   });
   GcPs.subscribe('show', (collection) => {});
   GcPs.subscribe('spiderfy', (markers) => {});

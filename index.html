@@ -25,7 +25,9 @@
       <p>Performant clustering for large datasets on Google Maps.</p>
     </header>
 
-    <div class="countContainer"></div>
+    <div class="countContainer">
+      <div><strong>Total Point Count:</strong> <span class="count"></span></div>
+    </div>
     <div id="mapContainer">
       <div id="map"></div>
     </div>
@@ -184,9 +186,17 @@
     </section>
 
     <footer class="pad">
-      <div>
+      <div class="personal">
         Built with <img src="src/images/heart.png" /> by&nbsp;
         <a href="https://twitter.com/iamjpg">@iamjpg</a>
+      </div>
+      <div class="credit">
+        Elementary school data provided by
+        <a
+          target="_blank"
+          href="https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json"
+          >https://public.gis.lacounty.gov</a
+        >.<br /><br />
       </div>
     </footer>
 
