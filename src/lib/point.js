@@ -4,12 +4,7 @@ import MarkerWithLabel from './markerwithlabel';
 import OverlappingMarkerSpiderfier from './spider-marker';
 
 export class Point {
-  constructor(
-    map,
-    collection,
-    customPinClickBehavior = false,
-    customPinHoverBehavior = false
-  ) {
+  constructor(map, collection) {
     this.map = map;
     this.markers = [];
     this.markerListeners = [];
@@ -52,10 +47,22 @@ export class Point {
     });
   }
 
+  publishEvent = debounce(
+    (eventStr, data) => {
+      GcPs.publish(eventStr, data);
+    },
+    250,
+    {
+      leading: true,
+      trailing: false,
+    }
+  );
+
   setOmsEvents() {
     const self = this;
 
     this.oms.addListener('spiderfy', function (markers) {
+      self.publishEvent('spiderfy', markers);
       self.removeUniversalPointHoverState();
       self.markers.forEach(function (marker) {
         marker.setOptions({
@@ -74,6 +81,7 @@ export class Point {
     });
 
     this.oms.addListener('unspiderfy', function (markers, event) {
+      self.publishEvent('unspiderfy', markers);
       self.removeUniversalPointHoverState();
       self.markers.forEach(function (marker) {
         marker.setOptions({

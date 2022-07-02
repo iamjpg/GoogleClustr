@@ -30,7 +30,7 @@ export class GoogleClustr {
   pointsRawLatLng: object;
   clusterRange: number = 200;
   threshold: number = 200;
-  clusterRgba: string = '182, 0, 155, 1';
+  clusterRgba: string = '34, 34, 34, 1';
   clusterBorder: string = '5px solid #ccc';
   polygonStrokeColor: string = '#222';
   polygonStrokeOpacity: string | number = '0.5';

@@ -5,10 +5,10 @@ import 'tippy.js/themes/light.css';
 
 (async () => {
   const options = {
-    center: { lat: 37.76487, lng: -122.41948 },
-    zoom: 5,
-    // center: { lat: 35.482770252450926, lng: -120.8537 },
-    // zoom: 9,
+    // center: { lat: 37.76487, lng: -122.41948 },
+    // zoom: 5,
+    center: { lat: 35.482770252450926, lng: -120.8537 },
+    zoom: 9,
     clickableIcons: false,
     controlSize: 20,
   };
@@ -62,4 +62,10 @@ import 'tippy.js/themes/light.css';
     )}`;
   });
   GcPs.subscribe('show', (collection) => {});
+  GcPs.subscribe('spiderfy', (markers) => {
+    console.log(markers);
+  });
+  GcPs.subscribe('unspiderfy', (markers) => {
+    console.log(markers);
+  });
 })();

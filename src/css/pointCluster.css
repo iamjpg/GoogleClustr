@@ -32,12 +32,12 @@
 }
 .marker-point {
   box-sizing: border-box;
-  background: #0f2b5b;
+  background: #222;
   box-shadow: 0 0 5px 1px #ccc;
   border: 2px solid #fff;
   color: #fff;
-  height: 18px;
-  width: 18px;
+  height: 16px;
+  width: 16px;
   border-radius: 100%;
   cursor: pointer;
 }
