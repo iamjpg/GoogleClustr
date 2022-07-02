@@ -1,7 +1,4 @@
 import { GoogleClustr } from './src/index.ts';
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
-import 'tippy.js/themes/light.css';
 
 (async () => {
   const options = {
