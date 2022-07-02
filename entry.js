@@ -5,10 +5,10 @@ import 'tippy.js/themes/light.css';
 
 (async () => {
   const options = {
-    // center: { lat: 37.76487, lng: -122.41948 },
-    // zoom: 5,
-    center: { lat: 35.482770252450926, lng: -120.8537 },
-    zoom: 9,
+    center: { lat: 37.76487, lng: -122.41948 },
+    zoom: 5,
+    // center: { lat: 35.482770252450926, lng: -120.8537 },
+    // zoom: 9,
     clickableIcons: false,
     controlSize: 20,
   };
@@ -33,9 +33,10 @@ import 'tippy.js/themes/light.css';
   const countContainer = document.querySelector('.countContainer');
 
   const tippyInstances = [];
+  const tippyClickInstances = [];
 
   GcPs.subscribe('click', (target) => {
-    tippy(`#${target.id}`, {
+    const tippyClickInstance = tippy(`#${target.id}`, {
       content: "I'm triggered by a click event!",
       theme: 'light',
       arrow: true,
@@ -43,6 +44,8 @@ import 'tippy.js/themes/light.css';
       showOnCreate: true,
       interactive: true,
     });
+
+    tippyClickInstances.push(tippyClickInstance);
   });
   GcPs.subscribe('hover', (target) => {
     if (!tippyInstances.includes(target.id)) {
@@ -62,10 +65,11 @@ import 'tippy.js/themes/light.css';
     )}`;
   });
   GcPs.subscribe('show', (collection) => {});
-  GcPs.subscribe('spiderfy', (markers) => {
-    console.log(markers);
-  });
+  GcPs.subscribe('spiderfy', (markers) => {});
   GcPs.subscribe('unspiderfy', (markers) => {
-    console.log(markers);
+    tippyClickInstances.forEach((instance) => {
+      instance[0].destroy();
+    });
+    tippyClickInstances = [];
   });
 })();
