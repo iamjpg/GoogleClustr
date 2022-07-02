@@ -52,7 +52,7 @@ import { GoogleClustr } from './src/index.ts';
   const gc = new GoogleClustr({
     map,
     mapContainer: 'map',
-    fitBounds: true,
+    fitBounds: false,
   });
 
   gc.setCollection(schoolsArr);
