@@ -27,11 +27,11 @@ export class GoogleClustr {
   map: any;
   collection: CollectionObject;
   mapContainer: string = 'map';
-  pointsRawLatLng: object;
   clusterRange: number = 200;
   threshold: number = 200;
   clusterRgba: string = '34, 34, 34, 1';
   clusterBorder: string = '5px solid #ccc';
+  clusterFontColor: string = '#FBBDC7';
   polygonStrokeColor: string = '#222';
   polygonStrokeOpacity: string | number = '0.5';
   polygonStrokeWeight: string | number = '4';
@@ -143,6 +143,8 @@ export class GoogleClustr {
         helpers.returnClusterClassObject(clusterLength).classSize;
 
       div.style.backgroundColor = 'rgba(' + this.clusterRgba + ')';
+      div.style.color = this.clusterFontColor;
+      // div.style.border = this.clusterBorder;
       div.dataset.positionid = i.toString();
 
       const latLngPointerArray: number[] = [];

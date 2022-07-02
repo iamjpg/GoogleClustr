@@ -1,6 +1,5 @@
 .point-cluster {
   position: absolute;
-  color: #fff !important;
   z-index: 2000;
   font-family: Helvetica, Verdana, Arial, sans-serif;
   width: 50px;

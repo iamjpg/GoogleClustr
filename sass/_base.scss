@@ -101,6 +101,28 @@ header {
   }
 }
 
+.propertiesContainer {
+  max-width: 800px;
+  margin: 50px auto;
+
+  .properties {
+    table {
+      width: 100%;
+
+      th {
+        text-align: left;
+        padding: 10px;
+      }
+
+      td {
+        padding: 10px;
+        background: #fff;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
 footer {
   margin-top: 100px;
   div {

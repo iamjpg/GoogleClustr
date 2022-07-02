@@ -89,6 +89,100 @@
       </div>
     </section>
 
+    <section class="propertiesContainer">
+      <h2>Properties</h2>
+      <div class="properties">
+        <table>
+          <tr>
+            <th>Prop</th>
+            <th>Description</th>
+            <th>Default</th>
+            <th>Required</th>
+          </tr>
+          <tr>
+            <td>map</td>
+            <td>Your google maps instance.</td>
+            <td>N/A</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>collection</td>
+            <td>Your collection of lat/lng points.</td>
+            <td>N/A</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>mapContainer</td>
+            <td>String of ID holding your map.</td>
+            <td>'map'</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>clusterRange</td>
+            <td>
+              The number of pixels, per square on the map, the derive the
+              clusters. The larger the #, the less total clusters per view.
+            </td>
+            <td>200</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>threshold</td>
+            <td>
+              The number of points where we switch from clusters to markers.
+            </td>
+            <td>200</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>clusterRgba</td>
+            <td>RGBA color for the clusters.</td>
+            <td>'34, 34, 34, 1'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>clusterFontColor</td>
+            <td>Font color for count inside cluster.</td>
+            <td>'#FBBDC7'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonStrokeColor</td>
+            <td>
+              Stroke color for the hover polygon showing the convex hull of the
+              cluster.
+            </td>
+            <td>'#222'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonStrokeOpacity</td>
+            <td>Opacity setting for the convex hull polygon.</td>
+            <td>'0.5'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonStrokeWeight</td>
+            <td>Weight of the polygon.</td>
+            <td>4</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonFillColor</td>
+            <td>Fill color of the polygon.</td>
+            <td>'#222'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonFillOpacity</td>
+            <td>Opacity of the polygon fill color.</td>
+            <td>'0.3'</td>
+            <td>false</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
     <footer class="pad">
       <div>
         Built with <img src="src/images/heart.png" /> by&nbsp;
