@@ -29,12 +29,59 @@
     <section class="featuresContainer">
       <h2>Features</h2>
       <div class="features">
-        <div>Soon...</div>
-        <div>Soon...</div>
-        <div>Soon...</div>
-        <div>Soon...</div>
-        <div>Soon...</div>
-        <div>Soon...</div>
+        <div>
+          <img src="src/svg/performance.svg" />
+          <h3>Performant</h3>
+          <p>
+            By not needing to create a Google Maps Marker instance for every
+            point, the performance for large data sets is much (like, by a lot)
+            better than the official clustering library.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/spiderfy.svg" />
+          <h3>Marker Spiderfy</h3>
+          <p>
+            Once below the cluster threshold the library uses the Marker
+            Spiderfy library to work with overlapping Markers.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/infowindow.svg" />
+          <h3>Info Window Agnostic</h3>
+          <p>
+            Using the integrated PubSub API you can control hover and click
+            interactions as you please. We're using Tippy, but you can use
+            whatever you want.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/configurable.svg" />
+          <h3>Configurable</h3>
+          <p>
+            Pass options to the constructor to make your clusters, polygons, and
+            markers look spectacular!
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/pubsub.svg" />
+          <h3>PubSub Events</h3>
+          <p>
+            As mentioned above, there is a built in Publish/Subscribe library
+            you can tap into. Listen to click, hover, marker-show, and count
+            events to add whatever interactive sauce you'd like.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/zoom.svg" />
+          <h3>Smart Zoom</h3>
+          <p>
+            When clicking on a cluster, depending on the convex hull of the
+            markers, you may need to zoom into the best view for the polygon, or
+            zoom in one level if members of the polygon are outside the visible
+            map.
+          </p>
+        </div>
       </div>
     </section>
 

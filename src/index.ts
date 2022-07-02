@@ -37,8 +37,6 @@ export class GoogleClustr {
   polygonStrokeWeight: string | number = '4';
   polygonFillColor: string = '#222';
   polygonFillOpacity: string | number = '0.3';
-  customPinHoverBehavior: boolean = false;
-  customPinClickBehavior: boolean = false;
   overlay: any;
   mapContainerElem: HTMLElement;
   points: any;
@@ -121,12 +119,7 @@ export class GoogleClustr {
   paint(centerPoints: number[]) {
     if (this.checkIfLatLngInBounds().length <= this.threshold) {
       this.overlay.setMap(null);
-      this.points = new Point(
-        this.map,
-        this.checkIfLatLngInBounds(),
-        this.customPinClickBehavior,
-        this.customPinHoverBehavior
-      );
+      this.points = new Point(this.map, this.checkIfLatLngInBounds());
       this.points.print();
       GcPs.publish('count', this.points.collection.length);
       GcPs.publish('show', this.points.collection);
