@@ -10,7 +10,9 @@
     "dev": "run-p watch parcel",
     "parcel": "parcel index.html -p 9876",
     "watch": "parcel watch",
-    "build": "parcel build"
+    "build": "NODE_ENV=production parcel build",
+    "vercel": "vercel ./dist",
+    "vercel:prod": "vercel ./dist --prod"
   },
   "author": "JP Given <jgiven@gmail.com>",
   "license": "ISC",
