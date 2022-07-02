@@ -55,7 +55,7 @@ export class Point {
   setOmsEvents() {
     const self = this;
 
-    this.oms.addListener('spiderfy', function (markers, event) {
+    this.oms.addListener('spiderfy', function (markers) {
       self.removeUniversalPointHoverState();
       self.markers.forEach(function (marker) {
         marker.setOptions({
