@@ -1,5 +1,5 @@
 {
-  "name": "googlemapspointcluster2022",
+  "name": "google-clustr",
   "version": "0.0.1",
   "description": "Google Maps clustering component for dealing with large data sets.",
   "source": "src/index.ts",

@@ -6,15 +6,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Google Maps Clustering</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="sass/main.scss" />
   </head>
 
   <body>
-    <header class="pad">Google Clustr</header>
-    <aside>Point Data && Module info here eventually...</aside>
-    <div id="map-container">
+    <header>
+      <h1>Google Clustr</h1>
+      <p>Performant clustering for large datasets on Google Maps.</p>
+    </header>
+
+    <div class="countContainer"></div>
+    <div id="mapContainer">
       <div id="map"></div>
     </div>
+
+    <section class="featuresContainer">
+      <h2>Features</h2>
+      <div class="features">
+        <div>
+          <img src="src/svg/performance.svg" />
+          <h3>Performant</h3>
+          <p>
+            By not needing to create a Google Maps Marker instance for every
+            point, the performance for large data sets is much (like, by a lot)
+            better than the official clustering library.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/spiderfy.svg" />
+          <h3>Marker Spiderfy</h3>
+          <p>
+            Once below the cluster threshold the library uses the Marker
+            Spiderfy library to work with overlapping Markers.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/infowindow.svg" />
+          <h3>Info Window Agnostic</h3>
+          <p>
+            Using the integrated PubSub API you can control hover and click
+            interactions as you please. We're using Tippy, but you can use
+            whatever you want.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/configurable.svg" />
+          <h3>Configurable</h3>
+          <p>
+            Pass options to the constructor to make your clusters, polygons, and
+            markers look spectacular!
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/pubsub.svg" />
+          <h3>PubSub Events</h3>
+          <p>
+            As mentioned above, there is a built in Publish/Subscribe library
+            you can tap into. Listen to click, hover, marker-show, and count
+            events to add whatever interactive sauce you'd like.
+          </p>
+        </div>
+        <div>
+          <img src="src/svg/zoom.svg" />
+          <h3>Smart Zoom</h3>
+          <p>
+            When clicking on a cluster, depending on the convex hull of the
+            markers, you may need to zoom into the best view for the polygon, or
+            zoom in one level if members of the polygon are outside the visible
+            map.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <footer class="pad">
       <div>
         Built with <img src="images/heart.png" /> by&nbsp;
@@ -24,6 +94,8 @@
 
     <!-- This Google Maps API Key only works on lvh.me:9876 or lvh.me -->
     <script src="https://maps.google.com/maps/api/js?key=AIzaSyBU9e7YTFQ6BCBLDT_UuEuXw26KMMSFUx8&libraries=geometry"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
     <script type="module" src="entry.js"></script>
   </body>
 </html>

@@ -1,9 +1,14 @@
-import { GoogleClustr } from './dist/module/index.js';
+import { GoogleClustr } from './src/index.ts';
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
 
 (async () => {
   const options = {
-    center: { lat: 42.231497689642886, lng: -120.84795105859376 },
-    zoom: 9,
+    center: { lat: 37.76487, lng: -122.41948 },
+    zoom: 5,
+    // center: { lat: 35.482770252450926, lng: -120.8537 },
+    // zoom: 9,
     clickableIcons: false,
     controlSize: 20,
   };
@@ -17,13 +22,6 @@ import { GoogleClustr } from './dist/module/index.js';
     'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'
   ).then((response) => response.json());
 
-  json.data.result_list.forEach(function (o, i) {
-    o.hoverData = o.lat + ' : ' + o.lng;
-    o.dataset = [{ bar: 'boop' }];
-    o.clickData =
-      "You've clicked on this locaton:<br />" + o.lat + ' : ' + o.lng;
-  });
-
   const gc = new GoogleClustr({
     map,
     mapContainer: 'map',
@@ -32,10 +30,36 @@ import { GoogleClustr } from './dist/module/index.js';
 
   gc.setCollection(json.data.result_list);
 
-  GoogleClustrPubSub.subscribe('click', (target) => {
-    console.log('click', target);
+  const countContainer = document.querySelector('.countContainer');
+
+  const tippyInstances = [];
+
+  GcPs.subscribe('click', (target) => {
+    tippy(`#${target.id}`, {
+      content: "I'm triggered by a click event!",
+      theme: 'light',
+      arrow: true,
+      trigger: 'click',
+      showOnCreate: true,
+      interactive: true,
+    });
   });
-  GoogleClustrPubSub.subscribe('hover', (target) => {
-    console.log('hover', target);
+  GcPs.subscribe('hover', (target) => {
+    if (!tippyInstances.includes(target.id)) {
+      tippy(`#${target.id}`, {
+        content: "I'm triggered by a hover event!",
+        theme: 'light',
+        arrow: true,
+        showOnCreate: true,
+      });
+    }
+
+    tippyInstances.push(target.id);
   });
+  GcPs.subscribe('count', (count) => {
+    countContainer.innerHTML = `<strong>Current Point Count:</strong> ${count.toLocaleString(
+      'en-US'
+    )}`;
+  });
+  GcPs.subscribe('show', (collection) => {});
 })();

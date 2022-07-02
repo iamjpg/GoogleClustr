@@ -9,21 +9,19 @@ import {
 import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
-import { Polygon } from './lib/polygon';
 import { Point } from './lib/Point';
-import GoogleClustrPubSub from 'vanilla-pubsub';
+import GcPs from 'vanilla-pubsub';
 
 declare var google: any;
 declare global {
   interface Window {
     example: string;
-    GoogleClustrPubSub: any;
+    GcPs: any;
   }
 }
 
 const helpers = new Helpers();
-const polygon = new Polygon();
-window.GoogleClustrPubSub = GoogleClustrPubSub;
+window.GcPs = GcPs;
 
 export class GoogleClustr {
   map: any;
@@ -34,13 +32,11 @@ export class GoogleClustr {
   threshold: number = 200;
   clusterRgba: string = '182, 0, 155, 1';
   clusterBorder: string = '5px solid #ccc';
-  polygonStrokeColor: string = '#336699';
+  polygonStrokeColor: string = '#222';
   polygonStrokeOpacity: string | number = '0.5';
   polygonStrokeWeight: string | number = '4';
-  polygonFillColor: string = '#336699';
-  polygonFillOpacity: string | number = '0.2';
-  customPinHoverBehavior: boolean = false;
-  customPinClickBehavior: boolean = false;
+  polygonFillColor: string = '#222';
+  polygonFillOpacity: string | number = '0.3';
   overlay: any;
   mapContainerElem: HTMLElement;
   points: any;
@@ -61,17 +57,17 @@ export class GoogleClustr {
     google.maps.event.addListener(this.map, 'idle', () => {
       if (this.collection) {
         this.createOverlay();
-        polygon.removePolygon();
+        this.removePolygon();
         this.removeElements();
         this.print();
       }
     });
     google.maps.event.addListener(this.map, 'dragstart', () => {
-      polygon.removePolygon();
+      this.removePolygon();
       this.removeElements();
     });
     google.maps.event.addListener(this.map, 'zoom_changed', () => {
-      polygon.removePolygon();
+      this.removePolygon();
       this.removeElements();
     });
   }
@@ -123,15 +119,13 @@ export class GoogleClustr {
   paint(centerPoints: number[]) {
     if (this.checkIfLatLngInBounds().length <= this.threshold) {
       this.overlay.setMap(null);
-      this.points = new Point(
-        this.map,
-        this.checkIfLatLngInBounds(),
-        this.customPinClickBehavior,
-        this.customPinHoverBehavior
-      );
+      this.points = new Point(this.map, this.checkIfLatLngInBounds());
       this.points.print();
+      GcPs.publish('count', this.points.collection.length);
+      GcPs.publish('show', this.points.collection);
     } else {
       this.paintClustersToCanvas(centerPoints);
+      GcPs.publish('count', this.checkIfLatLngInBounds().length);
     }
   }
 
@@ -199,10 +193,10 @@ export class GoogleClustr {
 
   setClusterEvents(el: HTMLElement) {
     el.onmouseover = () => {
-      polygon.showPolygon(el, this.collection, this.map);
+      this.showPolygon(el, this.collection, this.map);
     };
     el.onmouseout = () => {
-      polygon.removePolygon();
+      this.removePolygon();
     };
     el.onclick = () => {
       this.zoomToFit(el);
@@ -254,5 +248,48 @@ export class GoogleClustr {
       }
     }
     return arr;
+  }
+
+  showPolygon(el, collection, map) {
+    var collectionIds = el.dataset.latlngids.split(',');
+
+    // Push the first lat/lng point to the end to close the polygon.
+    collectionIds.push(collectionIds[0]);
+
+    var points = [];
+
+    for (let i = 0; i < collectionIds.length; i++) {
+      const pointer = collection[collectionIds[i]];
+      points.push({
+        x: pointer.lat,
+        y: pointer.lng,
+      });
+    }
+
+    points = convexHull(points);
+
+    points = points.map((item) => {
+      return {
+        lat: item.x,
+        lng: item.y,
+      };
+    });
+
+    this.polygon = new google.maps.Polygon({
+      paths: points,
+      strokeColor: this.polygonStrokeColor,
+      strokeOpacity: this.polygonStrokeOpacity,
+      strokeWeight: this.polygonStrokeWeight,
+      fillColor: this.polygonFillColor,
+      fillOpacity: this.polygonFillOpacity,
+    });
+
+    this.polygon.setMap(map);
+  }
+
+  removePolygon() {
+    if (this.polygon) {
+      this.polygon.setMap(null);
+    }
   }
 }
