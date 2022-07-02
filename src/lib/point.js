@@ -27,9 +27,6 @@ export class Point {
         id: `marker-${uuid.generate()}`,
         position: new google.maps.LatLng(lat, lng),
         map: self.map,
-        hoverContent: o.hoverData || '',
-        clickContent: o.clickData || '',
-        labelContent: '',
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 0,

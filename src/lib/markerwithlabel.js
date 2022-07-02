@@ -374,6 +374,7 @@ MarkerLabel_.prototype.draw = function () {
   this.setContent();
   this.setTitle();
   this.setStyles();
+  this.setDataSet();
 };
 
 /**
@@ -389,6 +390,13 @@ MarkerLabel_.prototype.setContent = function () {
     this.labelDiv_.innerHTML = ''; // Remove current content
     this.labelDiv_.appendChild(content);
   }
+};
+
+MarkerLabel_.prototype.setDataSet = function () {
+  const data = this.marker_.get('data');
+  data.forEach((o, i) => {
+    this.labelDiv_.dataset[Object.keys(o)[0]] = o[Object.keys(o)[0]];
+  });
 };
 
 /**

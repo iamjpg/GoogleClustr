@@ -5,10 +5,10 @@ import 'tippy.js/themes/light.css';
 
 (async () => {
   const options = {
-    center: { lat: 37.76487, lng: -122.41948 },
-    zoom: 5,
-    // center: { lat: 35.482770252450926, lng: -120.8537 },
-    // zoom: 9,
+    // center: { lat: 37.76487, lng: -122.41948 },
+    // zoom: 5,
+    center: { lat: 35.482770252450926, lng: -120.8537 },
+    zoom: 9,
     clickableIcons: false,
     controlSize: 20,
   };
@@ -22,6 +22,11 @@ import 'tippy.js/themes/light.css';
     'https://cdn.jsdelivr.net/gh/iamjpg/GoogleClustr@latest/json/example.json'
   ).then((response) => response.json());
 
+  json.data.result_list.forEach(function (o, i) {
+    const { lat, lng } = o;
+    o.dataset = [{ lat }, { lng }];
+  });
+
   const gc = new GoogleClustr({
     map,
     mapContainer: 'map',
@@ -32,8 +37,8 @@ import 'tippy.js/themes/light.css';
 
   const countContainer = document.querySelector('.countContainer');
 
-  const tippyInstances = [];
-  const tippyClickInstances = [];
+  let tippyInstances = [];
+  let tippyClickInstances = [];
 
   GcPs.subscribe('click', (target) => {
     const tippyClickInstance = tippy(`#${target.id}`, {
@@ -49,11 +54,13 @@ import 'tippy.js/themes/light.css';
   });
   GcPs.subscribe('hover', (target) => {
     if (!tippyInstances.includes(target.id)) {
+      const { dataset } = target;
       tippy(`#${target.id}`, {
-        content: "I'm triggered by a hover event!",
+        content: `Hovering<br /><strong>lat:</strong> ${dataset.lat}, <strong>lng:</strong> ${dataset.lng}`,
         theme: 'light',
         arrow: true,
         showOnCreate: true,
+        allowHTML: true,
       });
     }
 
