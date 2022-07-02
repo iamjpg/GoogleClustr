@@ -10,18 +10,18 @@ import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
 import { Point } from './lib/Point';
-import GoogleClustrPubSub from 'vanilla-pubsub';
+import GcPs from 'vanilla-pubsub';
 
 declare var google: any;
 declare global {
   interface Window {
     example: string;
-    GoogleClustrPubSub: any;
+    GcPs: any;
   }
 }
 
 const helpers = new Helpers();
-window.GoogleClustrPubSub = GoogleClustrPubSub;
+window.GcPs = GcPs;
 
 export class GoogleClustr {
   map: any;
@@ -128,11 +128,11 @@ export class GoogleClustr {
         this.customPinHoverBehavior
       );
       this.points.print();
-      GoogleClustrPubSub.publish('count', this.points.collection.length);
-      GoogleClustrPubSub.publish('show', this.points.collection);
+      GcPs.publish('count', this.points.collection.length);
+      GcPs.publish('show', this.points.collection);
     } else {
       this.paintClustersToCanvas(centerPoints);
-      GoogleClustrPubSub.publish('count', this.checkIfLatLngInBounds().length);
+      GcPs.publish('count', this.checkIfLatLngInBounds().length);
     }
   }
 

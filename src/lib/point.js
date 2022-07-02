@@ -93,7 +93,7 @@ export class Point {
       let mouseOverListener = marker.addListener(
         'mouseover',
         function ({ target }) {
-          GoogleClustrPubSub.publish('hover', target);
+          GcPs.publish('hover', target);
           marker.setOptions({
             zIndex: 10000,
             labelClass: this.labelClass + ' PointHoverState',
@@ -126,7 +126,7 @@ export class Point {
       let mouseClickListener = marker.addListener(
         'click',
         function ({ target }) {
-          GoogleClustrPubSub.publish('click', target);
+          GcPs.publish('click', target);
         }
       );
       self.markerListeners.push(mouseClickListener);

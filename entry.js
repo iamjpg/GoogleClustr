@@ -1,4 +1,7 @@
 import { GoogleClustr } from './dist/module/index.js';
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
 
 (async () => {
   const options = {
@@ -27,15 +30,29 @@ import { GoogleClustr } from './dist/module/index.js';
 
   const countContainer = document.querySelector('.countContainer');
 
-  GoogleClustrPubSub.subscribe('click', (target) => {
+  GcPs.subscribe('click', (target) => {
     console.log('click', target);
   });
-  GoogleClustrPubSub.subscribe('hover', (target) => {
+  GcPs.subscribe('hover', (target) => {
     console.log('hover', target);
   });
-  GoogleClustrPubSub.subscribe('count', (count) => {
+  GcPs.subscribe('count', (count) => {
     countContainer.innerHTML = `<strong>Current Point Count:</strong> ${count.toLocaleString(
       'en-US'
     )}`;
+  });
+  GcPs.subscribe('show', (collection) => {
+    setTimeout(() => {
+      const elems = document.querySelectorAll('.marker-point');
+
+      Array.from(elems).forEach((elem) => {
+        tippy(`#${elem.id}`, {
+          content: 'My tooltip!',
+          trigger: 'click',
+          theme: 'light',
+          arrow: true,
+        });
+      });
+    }, 500);
   });
 })();
