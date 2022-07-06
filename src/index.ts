@@ -10,13 +10,13 @@ import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
 import { Point } from './lib/Point';
-import GcPs from 'vanilla-pubsub';
+import GcPs from 'pubsub-js';
 
 declare var google: any;
 declare global {
   interface Window {
     example: string;
-    GcPs: any;
+    GcPs: PubSubJS.Base;
   }
 }
 
