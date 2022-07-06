@@ -1,5 +1,5 @@
 import './css/pointCluster.css';
-import * as d3 from 'd3';
+import { geom } from 'd3';
 import {
   MapOptions,
   CollectionObject,
@@ -86,7 +86,7 @@ export class GoogleClustr {
 
   print() {
     // create quadtree, and get centerpoints.
-    const quadtree = d3.geom.quadtree()(
+    const quadtree = geom.quadtree()(
       helpers.returnPointsRaw(this.map, this.collection)
     );
     const centerPoints = helpers.getCenterPoints(
@@ -245,7 +245,7 @@ export class GoogleClustr {
       width: mapEl.clientWidth,
     };
 
-    function latRad(lat) {
+    function latRad(lat: number) {
       const sin = Math.sin((lat * Math.PI) / 180);
       const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
       return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
