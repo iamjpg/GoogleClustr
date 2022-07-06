@@ -235,8 +235,8 @@ export class GoogleClustr {
   }
 
   getBoundsZoomLevel(bounds: any) {
-    var WORLD_DIM = { height: 256, width: 256 };
-    var ZOOM_MAX = 21;
+    const WORLD_DIM = { height: 256, width: 256 }; // a constant in Google's map projection
+    const ZOOM_MAX = 22;
 
     const mapEl = document.querySelector(`#${this.mapContainer}`);
 
@@ -246,8 +246,8 @@ export class GoogleClustr {
     };
 
     function latRad(lat) {
-      var sin = Math.sin((lat * Math.PI) / 180);
-      var radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+      const sin = Math.sin((lat * Math.PI) / 180);
+      const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
       return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
     }
 
@@ -255,16 +255,16 @@ export class GoogleClustr {
       return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
     }
 
-    var ne = bounds.getNorthEast();
-    var sw = bounds.getSouthWest();
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
 
-    var latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+    const latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
 
-    var lngDiff = ne.lng() - sw.lng();
-    var lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
+    const lngDiff = ne.lng() - sw.lng();
+    const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
 
-    var latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
-    var lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+    const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+    const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
     return Math.min(latZoom, lngZoom, ZOOM_MAX);
   }

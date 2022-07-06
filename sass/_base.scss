@@ -22,6 +22,14 @@ body {
   color: #222;
 }
 
+a {
+  color: #b6009b;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
 header {
   max-width: 1280px;
   margin: auto;
@@ -67,6 +75,15 @@ header {
   }
 }
 
+.credit {
+  max-width: 800px;
+  padding: 20px;
+  margin: auto;
+  background: #fff;
+  box-shadow: 5px 5px 0px 0px #ccc;
+  font-size: 14px;
+}
+
 .featuresContainer {
   max-width: 800px;
   margin: 50px auto;
@@ -75,8 +92,8 @@ header {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 1fr;
-    grid-column-gap: 16px;
-    grid-row-gap: 16px;
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
 
     div {
       background: #fff;
@@ -124,7 +141,7 @@ header {
 }
 
 footer {
-  margin-top: 100px;
+  margin-top: 50px;
   .personal {
     font-size: $small-font;
     display: flex;
@@ -136,11 +153,5 @@ footer {
     img {
       margin: 0 8px;
     }
-  }
-
-  .credit {
-    margin-top: 10px;
-    font-size: 10px;
-    text-align: center;
   }
 }
