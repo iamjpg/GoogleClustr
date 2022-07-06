@@ -100,7 +100,9 @@ export class GoogleClustr {
     }
 
     const overlayInterval = setInterval(() => {
-      this.mapContainerElem = document.querySelector('#GoogleClustrOverlay');
+      this.mapContainerElem = document.querySelector(
+        '#GoogleClustrOverlay'
+      ) as HTMLElement;
       if (this.mapContainerElem) {
         clearInterval(overlayInterval);
         this.paint(centerPoints);
@@ -111,7 +113,8 @@ export class GoogleClustr {
   removeElements() {
     var elements = document.getElementsByClassName('point-cluster');
     while (elements.length > 0) {
-      elements[0].parentNode.removeChild(elements[0]);
+      const element = elements[0] as HTMLElement;
+      element?.parentNode?.removeChild(elements[0]);
     }
   }
 
@@ -205,10 +208,10 @@ export class GoogleClustr {
   }
 
   zoomToFit(el: HTMLElement) {
-    const collectionIds = el.dataset.latlngids.split(',');
-    const points = [];
-    let points_alt = [];
-    collectionIds.forEach((o, i) => {
+    const collectionIds = el?.dataset?.latlngids?.split(',');
+    const points: any = [];
+    let points_alt: any = [];
+    collectionIds?.forEach((o, i) => {
       var pointer = this.collection[parseInt(o)];
       points_alt.push({
         x: pointer.lat,
@@ -238,7 +241,9 @@ export class GoogleClustr {
     const WORLD_DIM = { height: 256, width: 256 }; // a constant in Google's map projection
     const ZOOM_MAX = 22;
 
-    const mapEl = document.querySelector(`#${this.mapContainer}`);
+    const mapEl = document.querySelector(
+      `#${this.mapContainer}`
+    ) as HTMLElement;
 
     const mapDim = {
       height: mapEl.clientHeight,
@@ -284,12 +289,12 @@ export class GoogleClustr {
   }
 
   showPolygon(el: HTMLElement, collection: CollectionObject, map: any) {
-    var collectionIds = el.dataset.latlngids.split(',');
+    var collectionIds: any = el?.dataset?.latlngids?.split(',');
 
     // Push the first lat/lng point to the end to close the polygon.
     collectionIds.push(collectionIds[0]);
 
-    var points = [];
+    var points: any = [];
 
     for (let i = 0; i < collectionIds.length; i++) {
       const pointer = collection[collectionIds[i]];

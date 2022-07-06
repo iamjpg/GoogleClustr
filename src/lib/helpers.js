@@ -27,8 +27,6 @@ export class Helpers {
   }
 
   returnMapProjections(map) {
-    if (typeof map === 'undefined') return;
-
     const bounds = new google.maps.LatLngBounds(),
       projection = map.getProjection();
 
