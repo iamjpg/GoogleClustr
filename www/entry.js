@@ -13,14 +13,17 @@ import { GoogleClustr } from './index.js';
     options
   ));
 
-  const schoolsArr = [];
+  const gc = new GoogleClustr({
+    map,
+    mapContainer: 'map',
+  });
 
   const schools = await fetch(
     'https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json'
   ).then((response) => response.json());
 
-  schools.features.forEach((school) => {
-    const {
+  const schoolsArr = schools.features.map(
+    ({
       attributes: {
         latitude,
         longitude,
@@ -32,27 +35,22 @@ import { GoogleClustr } from './index.js';
         url,
         phones,
       },
-    } = school;
-
-    schoolsArr.push({
-      lat: latitude,
-      lng: longitude,
-      id: OBJECTID,
-      dataset: [
-        { name: Name },
-        { address: addrln1 },
-        { city },
-        { zip },
-        { url: url ? url : 'Not Available' },
-        { phones },
-      ],
-    });
-  });
-
-  const gc = new GoogleClustr({
-    map,
-    mapContainer: 'map',
-  });
+    }) => {
+      return {
+        lat: latitude,
+        lng: longitude,
+        id: OBJECTID,
+        dataset: [
+          { name: Name },
+          { address: addrln1 },
+          { city },
+          { zip },
+          { url: url ? url : 'Not Available' },
+          { phones },
+        ],
+      };
+    }
+  );
 
   gc.setCollection(schoolsArr);
 
