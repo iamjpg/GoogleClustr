@@ -19,7 +19,9 @@
     "build:dev": "node ./__dev__/cleanDist.js && node ./esbuild.js && node ./__dev__/copyDist.js",
     "dev": "npm run watch & node ./server.js",
     "build": "rimraf dist && node ./esbuild.js && npm run ts-types",
-    "watch": "npm-watch"
+    "watch": "npm-watch",
+    "vercel": "vercel ./www",
+    "vercel:prod": "vercel ./www --prod"
   },
   "keywords": [],
   "author": "",
