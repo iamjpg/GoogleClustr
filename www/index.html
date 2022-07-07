@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="#" />
+
+    <title>Google Maps Clustering</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tippy.js@6.3.7/themes/light.css"
+    />
+    <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Google Clustr</h1>
+      <p>Performant clustering for large datasets on Google Maps.</p>
+    </header>
+
+    <div class="countContainer">
+      <div><strong>Total Point Count:</strong> <span class="count"></span></div>
+    </div>
+    <div id="mapContainer">
+      <div id="map"></div>
+    </div>
+    <div class="credit">
+      Elementary school data provided by
+      <a
+        target="_blank"
+        href="https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json"
+        >https://public.gis.lacounty.gov</a
+      >.
+    </div>
+
+    <section class="featuresContainer">
+      <h2>Features</h2>
+      <div class="features">
+        <div>
+          <i class="ph-gauge"></i>
+          <h3>Performant</h3>
+          <p>
+            By not creating a Google Maps Marker instance for every point, the
+            performance for large data sets is much better than the official
+            clustering library for dealing with large datasets.
+          </p>
+        </div>
+        <div>
+          <i class="ph-bug"></i>
+          <h3>Marker Spiderfy</h3>
+          <p>
+            Once below the cluster threshold the library uses the Marker
+            Spiderfy library to work with overlapping Markers.
+          </p>
+        </div>
+        <div>
+          <i class="ph-chat-centered-text"></i>
+          <h3>Info Window Agnostic</h3>
+          <p>
+            Using the integrated PubSub API you can control hover and click
+            interactions as you please. We're using Tippy, but you can use
+            whatever you want.
+          </p>
+        </div>
+        <div>
+          <i class="ph-wrench"></i>
+          <h3>Configurable</h3>
+          <p>
+            Branding is important. You have the power to make your clusters and
+            markers look spectacular by adjusting options and overriding CSS.
+          </p>
+        </div>
+        <div>
+          <i class="ph-telegram-logo"></i>
+          <h3>PubSub Events</h3>
+          <p>
+            Subscribe to the libraties PubSub events to handle custom
+            interactions. With hover, click, count, and marker-show events, you
+            have control over the interactivity.
+          </p>
+        </div>
+        <div>
+          <i class="ph-magnifying-glass-plus"></i>
+          <h3>Smart Zoom</h3>
+          <p>
+            Based on the convex hull of the cluster polygon, we intelligently
+            zoom the user into the best view based upon that data.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="propertiesContainer">
+      <h2>Properties</h2>
+      <div class="properties">
+        <table>
+          <tr>
+            <th>Prop</th>
+            <th>Description</th>
+            <th>Default</th>
+            <th>Required</th>
+          </tr>
+          <tr>
+            <td>map</td>
+            <td>Your google maps instance.</td>
+            <td>N/A</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>collection</td>
+            <td>Your collection of lat/lng points.</td>
+            <td>N/A</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>mapContainer</td>
+            <td>String of ID holding your map.</td>
+            <td>'map'</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>clusterRange</td>
+            <td>
+              The size of the squares which the clusters are evaluated. The
+              larger the #, the less total clusters per view.
+            </td>
+            <td>200</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>threshold</td>
+            <td>
+              The number of points where we switch from clusters to markers.
+            </td>
+            <td>200</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>clusterRgba</td>
+            <td>RGBA color for the clusters.</td>
+            <td>'34, 34, 34, 1'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>clusterFontColor</td>
+            <td>Font color for count inside cluster.</td>
+            <td>'#FBBDC7'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonStrokeColor</td>
+            <td>
+              Stroke color for the hover polygon showing the convex hull of the
+              cluster.
+            </td>
+            <td>'#222'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonStrokeOpacity</td>
+            <td>Opacity setting for the convex hull polygon.</td>
+            <td>'0.5'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonStrokeWeight</td>
+            <td>Weight of the polygon.</td>
+            <td>4</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonFillColor</td>
+            <td>Fill color of the polygon.</td>
+            <td>'#222'</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>polygonFillOpacity</td>
+            <td>Opacity of the polygon fill color.</td>
+            <td>'0.3'</td>
+            <td>false</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <footer class="pad">
+      <div class="personal">
+        Built with <i class="ph-heart"></i> by&nbsp;
+        <a href="https://twitter.com/iamjpg">JP Given</a>
+      </div>
+    </footer>
+
+    <!-- This Google Maps API Key only works on lvh.me:9876 or lvh.me -->
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyBU9e7YTFQ6BCBLDT_UuEuXw26KMMSFUx8&libraries=geometry"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script type="module" src="entry.js"></script>
+  </body>
+</html>
