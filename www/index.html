@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="#" />
 
     <title>Google Maps Clustering</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,7 +17,8 @@
       rel="stylesheet"
       href="https://unpkg.com/tippy.js@6.3.7/themes/light.css"
     />
-    <link rel="stylesheet" href="sass/main.scss" />
+    <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="index.css" />
   </head>
 
   <body>
@@ -44,16 +46,16 @@
       <h2>Features</h2>
       <div class="features">
         <div>
-          <img src="src/svg/performance.svg" />
+          <i class="ph-gauge"></i>
           <h3>Performant</h3>
           <p>
-            By not needing to create a Google Maps Marker instance for every
-            point, the performance for large data sets is much (like, by a lot)
-            better than the official clustering library.
+            By not creating a Google Maps Marker instance for every point, the
+            performance for large data sets is much better than the official
+            clustering library for dealing with large datasets.
           </p>
         </div>
         <div>
-          <img src="src/svg/spiderfy.svg" />
+          <i class="ph-bug"></i>
           <h3>Marker Spiderfy</h3>
           <p>
             Once below the cluster threshold the library uses the Marker
@@ -61,7 +63,7 @@
           </p>
         </div>
         <div>
-          <img src="src/svg/infowindow.svg" />
+          <i class="ph-chat-centered-text"></i>
           <h3>Info Window Agnostic</h3>
           <p>
             Using the integrated PubSub API you can control hover and click
@@ -70,7 +72,7 @@
           </p>
         </div>
         <div>
-          <img src="src/svg/configurable.svg" />
+          <i class="ph-wrench"></i>
           <h3>Configurable</h3>
           <p>
             Branding is important. You have the power to make your clusters and
@@ -78,22 +80,20 @@
           </p>
         </div>
         <div>
-          <img src="src/svg/pubsub.svg" />
+          <i class="ph-telegram-logo"></i>
           <h3>PubSub Events</h3>
           <p>
-            As mentioned above, there is a built in Publish/Subscribe library
-            you can tap into. Listen to click, hover, marker-show, and count
-            events to add whatever interactive sauce you'd like.
+            Subscribe to the libraties PubSub events to handle custom
+            interactions. With hover, click, count, and marker-show events, you
+            have control over the interactivity.
           </p>
         </div>
         <div>
-          <img src="src/svg/zoom.svg" />
+          <i class="ph-magnifying-glass-plus"></i>
           <h3>Smart Zoom</h3>
           <p>
-            When clicking on a cluster, depending on the convex hull of the
-            markers, you may need to zoom into the best view for the polygon, or
-            zoom in one level if members of the polygon are outside the visible
-            map. We got ya covered.
+            Based on the convex hull of the cluster polygon, we intelligently
+            zoom the user into the best view based upon that data.
           </p>
         </div>
       </div>
@@ -195,13 +195,14 @@
 
     <footer class="pad">
       <div class="personal">
-        Built with <img src="src/images/heart.png" /> by&nbsp;
-        <a href="https://twitter.com/iamjpg">@iamjpg</a>
+        Built with <i class="ph-heart"></i> by&nbsp;
+        <a href="https://twitter.com/iamjpg">JP Given</a>
       </div>
     </footer>
 
     <!-- This Google Maps API Key only works on lvh.me:9876 or lvh.me -->
     <script src="https://maps.google.com/maps/api/js?key=AIzaSyBU9e7YTFQ6BCBLDT_UuEuXw26KMMSFUx8&libraries=geometry"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <script type="module" src="entry.js"></script>

@@ -1,4 +1,4 @@
-import { GoogleClustr } from './src/index.ts';
+import { GoogleClustr } from './index.js';
 
 (async () => {
   const options = {
@@ -61,7 +61,7 @@ import { GoogleClustr } from './src/index.ts';
   let tippyInstances = [];
   let tippyClickInstances = [];
 
-  GcPs.subscribe('click', (target) => {
+  GcPs.subscribe('click', (msg, target) => {
     const { dataset } = target;
 
     const htmlStr = `
@@ -84,7 +84,7 @@ import { GoogleClustr } from './src/index.ts';
 
     tippyClickInstances.push(tippyClickInstance);
   });
-  GcPs.subscribe('hover', (target) => {
+  GcPs.subscribe('hover', (msg, target) => {
     if (!tippyInstances.includes(target.id)) {
       const { dataset } = target;
       tippy(`#${target.id}`, {
@@ -98,7 +98,7 @@ import { GoogleClustr } from './src/index.ts';
 
     tippyInstances.push(target.id);
   });
-  GcPs.subscribe('count', (count) => {
+  GcPs.subscribe('count', (msg, count) => {
     countContainer.innerHTML = `${count.toLocaleString('en-US')}`;
   });
   GcPs.subscribe('show', (collection) => {});

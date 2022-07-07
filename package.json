@@ -1,43 +1,46 @@
 {
   "name": "google-clustr",
-  "version": "0.0.1",
-  "description": "Google Maps clustering component for dealing with large data sets.",
-  "source": "src/index.ts",
-  "main": "dist/main.js",
-  "module": "dist/module/index.js",
-  "types": "dist/types.d.ts",
-  "scripts": {
-    "dev": "run-p watch parcel",
-    "parcel": "parcel index.html -p 9876",
-    "watch": "parcel watch",
-    "build": "NODE_ENV=production parcel build",
-    "vercel": "vercel ./dist",
-    "vercel:prod": "vercel ./dist --prod"
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "watch": {
+    "build:dev": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "ts,js,scss",
+      "quiet": false
+    }
   },
-  "author": "JP Given <jgiven@gmail.com>",
+  "scripts": {
+    "ts-types": " tsc --emitDeclarationOnly --outDir dist/types",
+    "build:dev": "node ./__dev__/cleanDist.js && node ./esbuild.js && node ./__dev__/copyDist.js",
+    "dev": "npm run watch & node ./server.js",
+    "build": "rimraf dist && node ./esbuild.js && npm run ts-types",
+    "watch": "npm-watch"
+  },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/packager-ts": "2.6.2",
-    "@parcel/transformer-inline-string": "2.6.2",
-    "@parcel/transformer-sass": "2.6.2",
-    "@parcel/transformer-typescript-types": "2.6.2",
     "@types/d3": "^3.5.40",
     "@types/google.maps": "^3.49.2",
     "@types/node": "^18.0.0",
     "@types/pubsub-js": "^1.8.3",
-    "http-server": "^14.1.1",
-    "npm-run-all": "^4.1.5",
-    "parcel": "^2.6.2",
-    "typescript": ">=3.0.0"
+    "copy": "^0.3.2",
+    "esbuild": "^0.14.48",
+    "esbuild-sass-plugin": "^2.2.6",
+    "fs-extra": "^10.1.0",
+    "live-server": "^1.2.2",
+    "npm-watch": "^0.11.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
-    "convexhull": "^1.0.7",
-    "d3": "3.5.17",
-    "google-maps": "^4.3.3",
     "lodash.debounce": "^4.0.8",
-    "markerwithlabel": "^1.1.6",
     "pubsub-js": "^1.9.4",
-    "short-uuid": "^4.2.0",
-    "vanilla-pubsub": "^1.1.2"
+    "short-uuid": "^4.2.0"
   }
 }

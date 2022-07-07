@@ -1,5 +1,4 @@
-import './css/pointCluster.css';
-import { geom } from 'd3';
+import './scss/pointCluster.scss';
 import {
   MapOptions,
   CollectionObject,
@@ -9,12 +8,13 @@ import {
 import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
 import convexHull from './lib/convexHull';
-import { Point } from './lib/Point';
+import { Point } from './lib/point';
 import GcPs from 'pubsub-js';
 
 declare var google: any;
 declare global {
   interface Window {
+    d3: any;
     example: string;
     GcPs: PubSubJS.Base;
   }
@@ -25,7 +25,7 @@ window.GcPs = GcPs;
 
 export class GoogleClustr {
   map: any;
-  collection: CollectionObject;
+  collection!: CollectionObject;
   mapContainer: string = 'map';
   clusterRange: number = 200;
   threshold: number = 200;
@@ -38,12 +38,13 @@ export class GoogleClustr {
   polygonFillColor: string = '#222';
   polygonFillOpacity: string | number = '0.3';
   overlay: any;
-  mapContainerElem: HTMLElement;
+  mapContainerElem!: HTMLElement;
   points: any;
   polygon: any;
   helpers: typeof Helpers;
 
   constructor(options: MapOptions) {
+    helpers.getScript('https://d3js.org/d3.v3.min.js');
     for (let key in options) {
       this[key] = options[key];
     }
@@ -73,7 +74,12 @@ export class GoogleClustr {
 
   setCollection(collection: CollectionObject) {
     this.collection = collection;
-    this.print();
+    const d3Int = setInterval(() => {
+      if (window.d3) {
+        clearInterval(d3Int);
+        this.print();
+      }
+    }, 10);
   }
 
   createOverlay() {
@@ -86,7 +92,7 @@ export class GoogleClustr {
 
   print() {
     // create quadtree, and get centerpoints.
-    const quadtree = geom.quadtree()(
+    const quadtree = window.d3.geom.quadtree()(
       helpers.returnPointsRaw(this.map, this.collection)
     );
     const centerPoints = helpers.getCenterPoints(
