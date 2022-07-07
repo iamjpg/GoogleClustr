@@ -35,55 +35,64 @@ import { GoogleClustr } from 'google-clustr';
 ### Instantiation
 
 ```js
-const mapOptions = {
-  center: { lat: 34.05845309477056, lng: -118.03896754679423 },
-  zoom: 8,
-  clickableIcons: false,
-  controlSize: 20,
-};
+// IIFE
+(async () => {
+  // Map Options
+  const mapOptions = {
+    center: { lat: 34.05845309477056, lng: -118.03896754679423 },
+    zoom: 8,
+    clickableIcons: false,
+    controlSize: 20,
+  };
 
-const map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+  // Instantiate Google Maps Object
+  const map = new google.maps.Map(document.querySelector('#map'), mapOptions);
 
-const gc = new GoogleClustr({
-  map,
-  mapContainer: 'map',
-});
+  // Instantiate GoogleClustr Object
+  const gc = new GoogleClustr({
+    map,
+    mapContainer: 'map',
+  });
 
-const schools = await fetch(
-  'https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json'
-).then((response) => response.json());
+  // Fetch School Data
+  const schools = await fetch(
+    'https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json'
+  ).then((response) => response.json());
 
-const schoolsArr = schools.features.map(
-  ({
-    attributes: {
-      latitude,
-      longitude,
-      OBJECTID,
-      Name,
-      addrln1,
-      city,
-      zip,
-      url,
-      phones,
-    },
-  }) => {
-    return {
-      lat: latitude, // Required
-      lng: longitude, // Required
-      id: OBJECTID,
-      dataset: [
-        { name: Name },
-        { address: addrln1 },
-        { city },
-        { zip },
-        { url: url ? url : 'Not Available' },
-        { phones },
-      ],
-    };
-  }
-);
+  // Map data structure to array to be passed to the GoogleClustr object.
+  const schoolsArr = schools.features.map(
+    ({
+      attributes: {
+        latitude,
+        longitude,
+        OBJECTID,
+        Name,
+        addrln1,
+        city,
+        zip,
+        url,
+        phones,
+      },
+    }) => {
+      return {
+        lat: latitude, // Required
+        lng: longitude, // Required
+        id: OBJECTID,
+        dataset: [
+          { name: Name },
+          { address: addrln1 },
+          { city },
+          { zip },
+          { url: url ? url : 'Not Available' },
+          { phones },
+        ],
+      };
+    }
+  );
 
-gc.setCollection(schoolsArr);
+  // Set collection with array
+  gc.setCollection(schoolsArr);
+})();
 ```
 
 ## Instantiation Options
@@ -102,3 +111,7 @@ const gc = new GoogleClustr({
   polygonFillOpacity: '0.2', // Polygon fill color.
 });
 ```
+
+## More Information
+
+[Please visit the wiki](https://github.com/iamjpg/GoogleClustr/wiki/Welcome-to-the-GoogleClustr-Wiki)
