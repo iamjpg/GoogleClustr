@@ -1,6 +1,6 @@
 {
   "name": "google-clustr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Performant Google Maps Point Clustering",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -23,7 +23,14 @@
     "vercel": "vercel ./www",
     "vercel:prod": "vercel ./www --prod"
   },
-  "keywords": [],
+  "keywords": [
+    "Google Maps",
+    "Clustering",
+    "D3",
+    "Marker Spiderfier",
+    "Convex Hull",
+    "Quadtree"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
