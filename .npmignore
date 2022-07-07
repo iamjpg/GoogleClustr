@@ -3,6 +3,7 @@ __dev__/
 src/
 www/
 
+.DS_Store
 server.js
 tsconfig.json
 yarn.lock
