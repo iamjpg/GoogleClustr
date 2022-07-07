@@ -105,10 +105,10 @@ const gc = new GoogleClustr({
   clusterRgba: '255, 0, 102, .8', // Change the background of the cluster icon.
   clusterBorder: '5px solid #dcdcdc', // Change the border around the icon.
   polygonStrokeColor: '#0f0f0e', // Polygon stroke color.
-  polygonStrokeOpacity: '0.5', // Polygon stroke opacity.
-  polygonStrokeWeight: '4', // Polygon stroke weight.
+  polygonStrokeOpacity: 0.5, // Polygon stroke opacity.
+  polygonStrokeWeight: 4, // Polygon stroke weight.
   polygonFillColor: '#0f0f0e', // Polygom fill color.
-  polygonFillOpacity: '0.2', // Polygon fill color.
+  polygonFillOpacity: 0.2, // Polygon fill color.
 });
 ```
 
