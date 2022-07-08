@@ -39,9 +39,10 @@ export class Point {
 
       this.markers.push(m);
       this.oms.addMarker(m);
-      this.setOmsEvents();
-      this.setHoverEvents(false);
     });
+
+    this.setOmsEvents();
+    this.setHoverEvents(false);
   }
 
   publishEvent = debounce(
@@ -61,6 +62,7 @@ export class Point {
     this.oms.addListener('spiderfy', function (markers) {
       self.publishEvent('spiderfy', markers);
       self.removeUniversalPointHoverState();
+      console.log(self.markers.length);
       self.markers.forEach(function (marker) {
         marker.setOptions({
           zIndex: 1000,
@@ -71,7 +73,7 @@ export class Point {
         self.removeListeners();
         self.setHoverEvents(true);
         marker.setOptions({
-          zIndex: 20000,
+          zIndex: 2000,
           labelClass: marker.labelClass.replace(' fadePins', ''),
         });
       });
@@ -80,6 +82,7 @@ export class Point {
     this.oms.addListener('unspiderfy', function (markers, event) {
       self.publishEvent('unspiderfy', markers);
       self.removeUniversalPointHoverState();
+
       self.markers.forEach(function (marker) {
         marker.setOptions({
           zIndex: 1000,
