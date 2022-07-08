@@ -114,4 +114,4 @@ const gc = new GoogleClustr({
 
 ## More Information
 
-[Please visit the wiki](https://github.com/iamjpg/GoogleClustr/wiki/Welcome-to-the-GoogleClustr-Wiki)
+[Please visit the wiki](https://github.com/iamjpg/GoogleClustr/wiki)
