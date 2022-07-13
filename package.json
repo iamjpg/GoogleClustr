@@ -2,6 +2,11 @@
   "name": "google-clustr",
   "version": "1.0.2",
   "description": "Performant Google Maps Point Clustering",
+  "homepage": "https://google-clustr.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iamjpg/GoogleClustr.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
