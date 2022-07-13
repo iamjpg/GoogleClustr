@@ -1,6 +1,6 @@
 {
   "name": "google-clustr",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Performant Google Maps Point Clustering",
   "homepage": "https://google-clustr.vercel.app/",
   "repository": {
