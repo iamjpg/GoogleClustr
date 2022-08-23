@@ -15,4 +15,17 @@ const results = esbuild.build({
   plugins: [scss.sassPlugin()],
 });
 
+const resultsMjs = esbuild.build({
+  entryPoints: ['src/index.ts'],
+  outExtension: { '.js': '.mjs' },
+  outdir: 'dist',
+  bundle: true,
+  sourcemap: true,
+  minify: true,
+  splitting: true,
+  format: 'esm',
+  target: ['esnext'],
+  plugins: [scss.sassPlugin()],
+});
+
 // console.log(results);
