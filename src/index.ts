@@ -7,7 +7,7 @@ import {
 } from './interfaces/mapOptions';
 import Overlay from './lib/overlay';
 import { Helpers } from './lib/helpers';
-import convexHull from './lib/convexHull';
+import { convexHull } from './lib/convexHull';
 import { Point } from './lib/point';
 import GcPs from 'pubsub-js';
 
@@ -91,29 +91,30 @@ export class GoogleClustr {
   }
 
   print() {
-    // create quadtree, and get centerpoints.
-    const quadtree = window.d3.geom.quadtree()(
-      helpers.returnPointsRaw(this.map, this.collection)
-    );
+    const pointsRaw = helpers.returnPointsRaw(this.map, this.collection);
+    const quadtree = window.d3.geom.quadtree()(pointsRaw);
     const centerPoints = helpers.getCenterPoints(
       quadtree,
       this.mapContainer,
       this.clusterRange
     );
 
-    if (this.points) {
-      this.points.remove();
-    }
+    this.points?.remove();
 
-    const overlayInterval = setInterval(() => {
-      this.mapContainerElem = document.querySelector(
-        '#GoogleClustrOverlay'
-      ) as HTMLElement;
-      if (this.mapContainerElem) {
-        clearInterval(overlayInterval);
-        this.paint(centerPoints);
-      }
-    }, 10);
+    this.waitForMapContainer((mapContainerElem) => {
+      this.paint(centerPoints);
+    });
+  }
+
+  waitForMapContainer(callback: (mapContainerElem: HTMLElement) => void) {
+    this.mapContainerElem = document.querySelector(
+      '#GoogleClustrOverlay'
+    ) as HTMLElement;
+    if (this.mapContainerElem) {
+      callback(this.mapContainerElem);
+    } else {
+      setTimeout(() => this.waitForMapContainer(callback), 10);
+    }
   }
 
   removeElements() {
@@ -125,80 +126,79 @@ export class GoogleClustr {
   }
 
   paint(centerPoints: number[]) {
-    if (this.checkIfLatLngInBounds().length <= this.threshold) {
-      this.overlay.setMap(null);
-      this.points = new Point(this.map, this.checkIfLatLngInBounds());
+    const pointsInBounds = this.checkIfLatLngInBounds();
+
+    if (pointsInBounds.length <= this.threshold) {
+      this.removeOverlay();
+      this.points = new Point(this.map, pointsInBounds);
       this.points.print();
-      GcPs.publish('count', this.points.collection.length);
-      GcPs.publish('show', this.points.collection);
+      this.publishData(pointsInBounds.length, pointsInBounds);
     } else {
       this.paintClustersToCanvas(centerPoints);
-      GcPs.publish('count', this.checkIfLatLngInBounds().length);
+      this.publishData(pointsInBounds.length);
     }
   }
 
-  paintClustersToCanvas(points: string | any[]) {
-    const frag = document.createDocumentFragment();
+  removeOverlay() {
+    this.overlay.setMap(null);
+  }
 
-    for (let i = 0; i < points.length; i++) {
-      const clusterCount = points[i][2].length;
+  publishData(count: number, show?: any[]) {
+    GcPs.publish('count', count);
+    if (show) {
+      GcPs.publish('show', show);
+    }
+  }
+
+  paintClustersToCanvas(points: any[]) {
+    const fragment = document.createDocumentFragment();
+
+    points.forEach((point, i) => {
+      const clusterCount = point[2].length;
       const clusterLength = clusterCount.toString().length;
 
       const div = document.createElement('div');
-
-      div.className =
-        'point-cluster ' +
-        helpers.returnClusterClassObject(clusterLength).classSize;
-
-      div.style.backgroundColor = 'rgba(' + this.clusterRgba + ')';
+      div.className = `point-cluster ${
+        helpers.returnClusterClassObject(clusterLength).classSize
+      }`;
+      div.style.backgroundColor = `rgba(${this.clusterRgba})`;
       div.style.color = this.clusterFontColor;
-      // div.style.border = this.clusterBorder;
       div.dataset.positionid = i.toString();
 
-      const latLngPointerArray: number[] = [];
+      const latLngPointerArray = point[2].map((p) => p[2]);
+      const polygonCoords = latLngPointerArray.map((idx) => {
+        const pointer = this.collection[idx];
+        return new google.maps.LatLng(pointer.lat, pointer.lng);
+      });
 
-      for (let x = 0; x < points[i][2].length; x++) {
-        latLngPointerArray.push(points[i][2][x][2]);
-      }
+      const mapProjections = helpers.returnMapProjections(this.map);
+      polygonCoords.forEach((coord) => {
+        mapProjections.bounds.extend(coord);
+      });
 
-      const polygonCoords: number[] = [];
-      let pi: number;
-      const mapProjections: MapProjections = helpers.returnMapProjections(
-        this.map
+      const centerPoint = mapProjections.projection.fromLatLngToPoint(
+        mapProjections.bounds.getCenter()
       );
 
-      for (let n = 0; n < latLngPointerArray.length; n++) {
-        const pointer = this.collection[latLngPointerArray[n]];
-        polygonCoords.push(new google.maps.LatLng(pointer.lat, pointer.lng));
-      }
+      const x =
+        (centerPoint.x - mapProjections.bottomLeft.x) * mapProjections.scale;
+      const y =
+        (centerPoint.y - mapProjections.topRight.y) * mapProjections.scale;
 
-      for (pi = 0; pi < polygonCoords.length; pi++) {
-        mapProjections.bounds.extend(polygonCoords[pi]);
-      }
-
-      const point: PointObject = mapProjections.projection.fromLatLngToPoint(
-        new google.maps.LatLng(
-          mapProjections.bounds.getCenter().lat(),
-          mapProjections.bounds.getCenter().lng()
-        )
-      );
-
-      // Get the x/y based on the scale.
-      const x = (point.x - mapProjections.bottomLeft.x) * mapProjections.scale;
-      const y = (point.y - mapProjections.topRight.y) * mapProjections.scale;
-
-      div.style.left =
-        x - helpers.returnClusterClassObject(clusterLength).offSet + 'px';
-      div.style.top =
-        y - helpers.returnClusterClassObject(clusterLength).offSet + 'px';
-
+      div.style.left = `${
+        x - helpers.returnClusterClassObject(clusterLength).offSet
+      }px`;
+      div.style.top = `${
+        y - helpers.returnClusterClassObject(clusterLength).offSet
+      }px`;
       div.dataset.latlngids = latLngPointerArray.join(',');
       div.innerHTML = clusterCount.toString();
-      frag.appendChild(div);
-      this.setClusterEvents(div);
-    }
 
-    this.mapContainerElem.appendChild(frag);
+      fragment.appendChild(div);
+      this.setClusterEvents(div);
+    });
+
+    this.mapContainerElem.appendChild(fragment);
   }
 
   setClusterEvents(el: HTMLElement) {
@@ -215,46 +215,33 @@ export class GoogleClustr {
 
   zoomToFit(el: HTMLElement) {
     const collectionIds = el?.dataset?.latlngids?.split(',');
-    const points: any = [];
-    let points_alt: any = [];
-    collectionIds?.forEach((o, i) => {
-      var pointer = this.collection[parseInt(o)];
-      points_alt.push({
-        x: pointer.lat,
-        y: pointer.lng,
-      });
-    });
-    points_alt = convexHull(points_alt);
-    points_alt.forEach(function (o, i) {
-      points.push(new google.maps.LatLng(o.x, o.y));
-    });
-    const latlngbounds = new google.maps.LatLngBounds();
+    if (!collectionIds) return;
 
-    for (var i = 0; i < points.length; i++) {
-      latlngbounds.extend(points[i]);
-    }
+    const latlngs = collectionIds.map((id) => {
+      const pointer = this.collection[parseInt(id)];
+      return new google.maps.LatLng(pointer.lat, pointer.lng);
+    });
+
+    const bounds = new google.maps.LatLngBounds();
+    latlngs.forEach((latlng) => bounds.extend(latlng));
+
+    const center = bounds.getCenter();
+    const zoom = this.getBoundsZoomLevel(bounds);
 
     requestAnimationFrame(() => {
-      const center_lat = latlngbounds.getCenter().lat();
-      const center_lng = latlngbounds.getCenter().lng();
-      const current_zoom = this.map.getZoom();
-      this.map.setCenter(new google.maps.LatLng(center_lat, center_lng));
-      this.map.setZoom(this.getBoundsZoomLevel(latlngbounds));
+      this.map.setCenter(center);
+      this.map.setZoom(zoom);
     });
   }
 
   getBoundsZoomLevel(bounds: any) {
-    const WORLD_DIM = { height: 256, width: 256 }; // a constant in Google's map projection
+    const WORLD_DIM = { height: 256, width: 256 };
     const ZOOM_MAX = 22;
 
     const mapEl = document.querySelector(
       `#${this.mapContainer}`
     ) as HTMLElement;
-
-    const mapDim = {
-      height: mapEl.clientHeight,
-      width: mapEl.clientWidth,
-    };
+    const mapDim = { height: mapEl.clientHeight, width: mapEl.clientWidth };
 
     function latRad(lat: number) {
       const sin = Math.sin((lat * Math.PI) / 180);
@@ -281,46 +268,32 @@ export class GoogleClustr {
   }
 
   checkIfLatLngInBounds() {
-    const self = this;
-    const arr = helpers.clone(this.collection);
-    for (let i = 0; i < arr.length; ++i) {
-      let lat = arr[i].lat || arr[i].location.latitude;
-      let lng = arr[i].lng || arr[i].location.longitude;
-      if (!self.map.getBounds().contains(new google.maps.LatLng(lat, lng))) {
-        arr.splice(i, 1);
-        --i; // Correct the index value
-      }
-    }
-    return arr;
+    const collection = this.collection.filter((item) => {
+      const lat = item.lat || item.location.latitude;
+      const lng = item.lng || item.location.longitude;
+      const latLng = new google.maps.LatLng(lat, lng);
+      return this.map.getBounds().contains(latLng);
+    });
+
+    return collection;
   }
 
   showPolygon(el: HTMLElement, collection: CollectionObject, map: any) {
-    var collectionIds: any = el?.dataset?.latlngids?.split(',');
-
-    // Push the first lat/lng point to the end to close the polygon.
-    collectionIds.push(collectionIds[0]);
-
-    var points: any = [];
-
-    for (let i = 0; i < collectionIds.length; i++) {
-      const pointer = collection[collectionIds[i]];
-      points.push({
-        x: pointer.lat,
-        y: pointer.lng,
-      });
-    }
-
-    points = convexHull(points);
-
-    points = points.map((item) => {
-      return {
-        lat: item.x,
-        lng: item.y,
-      };
-    });
+    const collectionIds = (el?.dataset?.latlngids?.split(',') || []).concat(
+      el?.dataset?.latlngids?.split(',')[0] as any
+    );
+    const points = collectionIds.map((id) => ({
+      x: collection[id].lat,
+      y: collection[id].lng,
+    }));
+    const convexHullPoints = convexHull(points);
+    const googleMapPoints = convexHullPoints.map((item) => ({
+      lat: item.x,
+      lng: item.y,
+    }));
 
     this.polygon = new google.maps.Polygon({
-      paths: points,
+      paths: googleMapPoints,
       strokeColor: this.polygonStrokeColor,
       strokeOpacity: this.polygonStrokeOpacity,
       strokeWeight: this.polygonStrokeWeight,
