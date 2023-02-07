@@ -14,11 +14,17 @@ export interface MapOptions {
   customPinClickBehavior: boolean; // If the user of the lib would rather not use popper and opt for their own click behavior.
 }
 
-export interface CollectionObject {
+export interface EnumServiceItem {
   map: any;
   lat: number;
   lng: number;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }
+
+export interface CollectionObject extends Array<EnumServiceItem> {}
 
 export interface MapProjections {
   scale: number;

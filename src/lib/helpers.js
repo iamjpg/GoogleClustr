@@ -2,8 +2,10 @@ export class Helpers {
   constructor() {}
 
   clone(o) {
-    const n = {}.toString.apply(o) == '[object Array]' ? [] : {};
-    for (let i in o) n[i] = typeof o[i] == 'object' ? this.clone(o[i]) : o[i];
+    const n = Array.isArray(o) ? [] : {};
+    for (const i in o) {
+      n[i] = typeof o[i] === 'object' ? clone(o[i]) : o[i];
+    }
     return n;
   }
 
@@ -60,18 +62,13 @@ export class Helpers {
   }
 
   getCenterPoints(quadtree, mapContainer, clusterRange) {
+    const mapContainerElement = document.getElementById(mapContainer);
+    const mapWidth = mapContainerElement.offsetWidth;
+    const mapHeight = mapContainerElement.offsetHeight;
     const clusterPoints = [];
 
-    for (
-      let x = 0;
-      x <= document.getElementById(mapContainer).offsetWidth;
-      x += clusterRange
-    ) {
-      for (
-        let y = 0;
-        y <= document.getElementById(mapContainer).offsetHeight;
-        y += clusterRange
-      ) {
+    for (let x = 0; x <= mapWidth; x += clusterRange) {
+      for (let y = 0; y <= mapHeight; y += clusterRange) {
         const searched = this.searchQuadTree(
           quadtree,
           x,
@@ -79,20 +76,14 @@ export class Helpers {
           x + clusterRange,
           y + clusterRange
         );
-
         const centerPoint = searched.reduce(
-          function (prev, current) {
-            return [prev[0] + current[0], prev[1] + current[1]];
-          },
+          (prev, current) => [prev[0] + current[0], prev[1] + current[1]],
           [0, 0]
         );
-
-        centerPoint[0] = centerPoint[0] / searched.length;
-        centerPoint[1] = centerPoint[1] / searched.length;
-        centerPoint.push(searched);
-
-        if (centerPoint[0] && centerPoint[1]) {
-          clusterPoints.push(centerPoint);
+        const avgX = centerPoint[0] / searched.length;
+        const avgY = centerPoint[1] / searched.length;
+        if (avgX && avgY) {
+          clusterPoints.push([avgX, avgY, searched]);
         }
       }
     }
@@ -102,12 +93,13 @@ export class Helpers {
 
   searchQuadTree(quadtree, x0, y0, x3, y3) {
     const validData = [];
-    quadtree.visit(function (node, x1, y1, x2, y2) {
-      const p = node.point;
-      if (p) {
-        p.selected = p[0] >= x0 && p[0] < x3 && p[1] >= y0 && p[1] < y3;
-        if (p.selected) {
-          validData.push(p);
+    quadtree.visit((node, x1, y1, x2, y2) => {
+      const point = node.point;
+      if (point) {
+        const isSelected =
+          point[0] >= x0 && point[0] < x3 && point[1] >= y0 && point[1] < y3;
+        if (isSelected) {
+          validData.push(point);
         }
       }
       return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
@@ -116,24 +108,12 @@ export class Helpers {
   }
 
   async getScript(source, callback) {
-    var script = document.createElement('script');
-    var prior = document.getElementsByTagName('script')[0];
-    script.async = 1;
-
-    script.onload = script.onreadystatechange = function (_, isAbort) {
-      if (
-        isAbort ||
-        !script.readyState ||
-        /loaded|complete/.test(script.readyState)
-      ) {
-        script.onload = script.onreadystatechange = null;
-        script = undefined;
-
-        if (!isAbort && callback) setTimeout(callback, 0);
-      }
+    const script = document.createElement('script');
+    script.async = true;
+    script.onload = () => {
+      if (callback) setTimeout(callback, 0);
     };
-
     script.src = source;
-    prior.parentNode.insertBefore(script, prior);
+    document.head.appendChild(script);
   }
 }

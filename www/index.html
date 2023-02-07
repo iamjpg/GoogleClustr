@@ -201,7 +201,11 @@
     </footer>
 
     <!-- This Google Maps API Key only works on lvh.me:9876 or lvh.me -->
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyBU9e7YTFQ6BCBLDT_UuEuXw26KMMSFUx8&libraries=geometry"></script>
+    <script>
+      function dummy() {}
+      window.dummy = dummy;
+    </script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyBU9e7YTFQ6BCBLDT_UuEuXw26KMMSFUx8&libraries=geometry&callback=dummy"></script>
     <script src="https://unpkg.com/phosphor-icons"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>

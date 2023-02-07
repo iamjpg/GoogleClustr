@@ -1,37 +1,33 @@
-// Constructor.
-function OverlayContainer(map) {
-  this.map = map;
+class OverlayContainer extends google.maps.OverlayView {
+  constructor(map) {
+    super();
+    this.map = map;
+  }
+
+  onRemove() {
+    this.div.parentNode.removeChild(this.div);
+    this.div = null;
+  }
+
+  onAdd() {
+    this.div = document.createElement('div');
+    this.div.style.position = 'absolute';
+    this.div.id = 'GoogleClustrOverlay';
+    const panes = this.getPanes();
+    panes.overlayImage.appendChild(this.div);
+  }
+
+  draw() {
+    const overlayProjection = this.getProjection();
+    const sw = overlayProjection.fromLatLngToDivPixel(
+      this.map.getBounds().getSouthWest()
+    );
+    const ne = overlayProjection.fromLatLngToDivPixel(
+      this.map.getBounds().getNorthEast()
+    );
+    this.div.style.left = `${sw.x}px`;
+    this.div.style.top = `${ne.y}px`;
+  }
 }
 
-// Per Google spec, ne OverlayView on the prototype.
-OverlayContainer.prototype = new google.maps.OverlayView();
-
-// Api called when setMap(null) is called
-OverlayContainer.prototype.onRemove = function () {
-  this.div.parentNode.removeChild(this.div);
-  this.div = null;
-};
-
-// Api called when obj.setMap(map instance) is called.
-OverlayContainer.prototype.onAdd = function () {
-  this.div = document.createElement('div');
-  this.div.style.position = 'absolute';
-  this.div.id = 'GoogleClustrOverlay';
-  var panes = this.getPanes();
-  panes.overlayImage.appendChild(this.div);
-};
-
-// Api called when element is appended. Logic assures that the overlay will always be at 0/0 if the map.
-OverlayContainer.prototype.draw = function () {
-  var overlayProjection = this.getProjection();
-  var sw = overlayProjection.fromLatLngToDivPixel(
-    this.map.getBounds().getSouthWest()
-  );
-  var ne = overlayProjection.fromLatLngToDivPixel(
-    this.map.getBounds().getNorthEast()
-  );
-  this.div.style.left = sw.x + 'px';
-  this.div.style.top = ne.y + 'px';
-};
-
-module.exports = OverlayContainer;
+export default OverlayContainer;
