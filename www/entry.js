@@ -18,9 +18,9 @@ import { GoogleClustr } from './index.js';
     mapContainer: 'map',
   });
 
-  const schools = await fetch(
-    'https://public.gis.lacounty.gov/public/rest/services/LACounty_Dynamic/LMS_Data_Public/MapServer/49/query?where=1%3D1&outFields=*&outSR=4326&f=json'
-  ).then((response) => response.json());
+  const schools = await fetch('/data/school_data.json').then((response) =>
+    response.json()
+  );
 
   const schoolsArr = schools.features.map(
     ({
