@@ -10,6 +10,12 @@ Performant Google Maps Point Clustering.
 
 IMO, the current Google Maps Cluster library ([See library here](https://github.com/googlemaps/js-marker-clusterer)) is really inefficient when dealing with massive amounts of points as it creates a Google Maps Marker object for each point before clustering them.
 
+### A special thank you to these D3 projects and articles that allowed me to figure out how to effectively cluster a cartesian dataset.
+
+1. [https://www.phase2technology.com](https://www.phase2technology.com/blog/using-d3-quadtrees-to-power-an-interactive-map-for-bonnier-corporation/) wrote a great blog post about utilizing D3 to accomplish complex clustering.
+2. [https://thoughbot.com](https://robots.thoughtbot.com/how-to-handle-large-amounts-of-data-on-maps) wrote possibly the best article I had come across on how to accomplish this with ObjectiveC example code.
+3. [http://bl.ocks.org/mbostock/4343214](http://bl.ocks.org/mbostock/4343214) one of many great D3 examples out in the internet.
+
 ## Install
 
 ### NPM
